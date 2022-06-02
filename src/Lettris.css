@@ -1,0 +1,143 @@
+* {
+  box-sizing: border-box;
+}
+
+.square {
+  text-align: center;
+}
+
+.selected-filled-square {
+  border: inset;
+  background-color: #5cdb95;
+}
+
+.unselected-filled-square {
+  border: outset;
+  background-color: #41b3a3;
+}
+
+.empty-square {
+  border: none;
+  background-color: #5cdb95;
+}
+
+.grid-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  background-color: #5cdb95;
+}
+
+.bottom-container {
+  position: relative;
+  display: flex;
+}
+
+.start-button, .back-button {
+  background-color: #41b3a3;
+  text-align: center;
+  border: none;
+}
+
+.word-score-display, .word-score-display-clickable {
+  background-color: #8ee4af;
+  border: inset;
+  text-align: center;
+}
+
+.word-score-display-clickable {
+  border: outset;
+  background-color: #41b3a3;
+}
+
+@media screen and (orientation: landscape) {
+  .selected-filled-square, .unselected-filled-square, .empty-square {
+    padding-top: 0.5vh;
+    border-radius: 1vh;
+    height: 5vh;
+    width: 5vh;
+    font-size: 3vh;
+  }
+
+  .grid-container {
+    border-radius: 1vh;
+    margin: auto;
+    width: 50vh;
+    height: 80vh;
+  }
+
+  .word-score-display, .word-score-display-clickable {
+    padding-top: 1vh;
+    height: 5vh;
+    width: 35vh;
+    font-size: 3vh;
+  }
+
+  .bottom-container {
+    margin: auto;
+    width: 50vh;
+  }
+
+  .start-button {
+    border-top-left-radius: 1vh;
+    border-bottom-left-radius: 1vh;
+  }
+
+  .back-button {
+    border-top-right-radius: 1vh;
+    border-bottom-right-radius: 1vh;
+  }
+
+  .start-button, .back-button {
+    height: 5vh;
+    width: 7.5vh;
+    font-size: 1.7vh;
+  }
+}
+
+@media screen and (orientation: portrait) {
+  .selected-filled-square, .unselected-filled-square, .empty-square {
+    padding-top: 0.5vw;
+    border-radius: 2vw;
+    height: 9vw;
+    width: 9vw;
+    font-size: 6vw;
+  }
+
+  .grid-container {
+    border-radius: 2vw;
+    margin: auto;
+    width: 90vw;
+    height: 144vw;
+  }
+
+  .word-score-display, .word-score-display-clickable {
+    padding-top: 0.5vw;
+    height: 9vw;
+    width: 63vw;
+    font-size: 6vw;
+  }
+
+  .bottom-container {
+    margin: auto;
+    width: 90vw;
+  }
+
+  .start-button {
+    border-top-left-radius: 2vw;
+    border-bottom-left-radius: 2vw;
+  }
+
+  .back-button {
+    border-top-right-radius: 2vw;
+    border-bottom-right-radius: 2vw;
+  }
+
+  .start-button, .back-button {
+    height: 9vw;
+    width: 13.5vw;
+    font-size: 2.5vw;
+  }
+}
+
