@@ -2,15 +2,9 @@
 import React from 'react';
 import './Lettris.css';
 
-const WordList = [];
-
 function GetPseudorandomLetter() {
   const WeightedLetters = "EEEEEEEEEEAAAAAAAARRRRRRRIIIIIIIOOOOOOOTTTTTTTNNNNNNNSSSSSSLLLLLCCCCCUUUUDDDPPPMMMHHHGGBBFFYYWKVXZJQ";
   return WeightedLetters[Math.floor(Math.random() * WeightedLetters.length)];
-}
-
-function isValidWord(word) {
-  return WordList.includes(word);
 }
 
 function Square(props) {
@@ -80,6 +74,8 @@ class Lettris extends React.Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.handleDisplayClick = this.handleDisplayClick.bind(this);
 
+    this.checkValidWord = this.checkValidWord.bind(this);
+
     this.pauseGame = this.pauseGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.updateGrid = this.updateGrid.bind(this);
@@ -95,16 +91,24 @@ class Lettris extends React.Component {
   }
   
   componentDidMount() {
-    fetch(
-      "/words3.txt")
-      .then(response => response.text())
-      .then(data => {
-        let tmpList =  data.split("\n");
-        for (let i = 0; i < tmpList.length; i++) {
-          WordList.push(tmpList[i].replace("\r", ""));
-        }
-      })
-      .catch(error => console.error(error));
+  }
+
+  checkValidWord(word) {
+    if (word.length < 3) {
+      this.setState({displayClickable: false});
+      return;
+    }
+    
+    fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
+    .then(response => {
+      let clickable = false;
+      if (response.status === 200) {
+        clickable = true;
+      }
+      this.setState({displayClickable: clickable});
+    })
+    .catch(error => this.setState({displayClickable: false})
+    );
   }
 
   refreshFallingSquares() {
@@ -224,11 +228,7 @@ class Lettris extends React.Component {
     this.wordScoreDisplayText.push(this.squareArray[i].alphabet);
     let word = this.wordScoreDisplayText.join('');
 
-    let displayClickable = false;
-
-    if (isValidWord(word)) {
-      displayClickable = true;
-    }
+    this.checkValidWord(word);
 
     let gridSelected = [...this.state.selected];
     let gridLetters = [...this.state.letters];
@@ -238,7 +238,6 @@ class Lettris extends React.Component {
     this.setState({
       selected: gridSelected,
       displayText: word,
-      displayClickable: displayClickable,
     });
   }
 
@@ -295,18 +294,14 @@ class Lettris extends React.Component {
 
     this.wordScoreDisplayText.pop();
     let word = this.wordScoreDisplayText.join('');
-    let displayClickable = false;
 
-    if (isValidWord(word)) {
-      displayClickable = true;
-    }
+    this.checkValidWord(word);
 
     this.getGridState(gridLetters, gridSelected);
     
     this.setState({
       selected: gridSelected,
       displayText: word,
-      displayClickable: displayClickable,
     });
   }
 
