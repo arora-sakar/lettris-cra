@@ -2,23 +2,207 @@
   box-sizing: border-box;
 }
 
-.square {
+[class*="square"] {
   text-align: center;
+  color: white;
 }
 
-.selected-filled-square {
+[class*="selected-filled"] {
   border: inset;
-  background-color: #5cdb95;
 }
 
-.unselected-filled-square {
+[class*="unselected-filled"] {
   border: outset;
-  background-color: #41b3a3;
+}
+
+
+.selected-filled-square-A {
+  background-color: hsl(13, 69%, 80%);
+}
+.unselected-filled-square-A {
+  background-color: hsl(13, 69%, 50%);
+}
+
+.selected-filled-square-B {
+  background-color: hsl(193, 47%, 80%);
+}
+.unselected-filled-square-B {
+  background-color: hsl(193, 47%, 50%);
+}
+
+.selected-filled-square-C {
+  background-color: hsl(341, 31%, 80%);
+}
+.unselected-filled-square-C {
+  background-color: hsl(341, 31%, 50%);
+}
+
+.selected-filled-square-D {
+  background-color: hsl(347, 90%, 80%);
+}
+.unselected-filled-square-D {
+  background-color: hsl(347, 90%, 50%);
+}
+
+.selected-filled-square-E {
+  background-color: hsl(240, 60%, 80%);
+}
+.unselected-filled-square-E {
+  background-color: hsl(240, 60%, 57%);
+}
+
+.selected-filled-square-F {
+  background-color: hsl(55, 37%, 80%);
+}
+.unselected-filled-square-F {
+  background-color: hsl(55, 37%, 50%);
+}
+
+.selected-filled-square-G {
+  background-color: hsl(168, 46%, 80%);
+}
+.unselected-filled-square-G {
+  background-color: hsl(168, 46%, 50%);
+}
+
+.selected-filled-square-H {
+  background-color: hsl(24, 97%, 80%);
+}
+.unselected-filled-square-H {
+  background-color: hsl(24, 97%, 50%);
+}
+
+.selected-filled-square-I {
+  background-color: hsl(143, 61%, 80%);
+}
+.unselected-filled-square-I {
+  background-color: hsl(143, 61%, 50%);
+}
+
+.selected-filled-square-J {
+  background-color: hsl(84, 50%, 80%);
+}
+.unselected-filled-square-J {
+  background-color: hsl(84, 50%, 50%);
+}
+
+.selected-filled-square-K {
+  background-color: hsl(19, 19%, 80%);
+}
+.unselected-filled-square-K {
+  background-color: hsl(19, 19%, 50%);
+}
+
+.selected-filled-square-L {
+  background-color: hsl(167, 31%, 80%);
+}
+.unselected-filled-square-L {
+  background-color: hsl(167, 31%, 50%);
+}
+
+.selected-filled-square-M {
+  background-color: hsl(252, 36%, 80%);
+}
+.unselected-filled-square-M {
+  background-color: hsl(252, 36%, 50%);
+}
+
+.selected-filled-square-N {
+  background-color: hsl(205, 27%, 80%);
+}
+.unselected-filled-square-N {
+  background-color: hsl(205, 27%, 50%);
+}
+
+.selected-filled-square-O {
+  background-color: hsl(295, 77%, 80%);
+}
+.unselected-filled-square-O {
+  background-color: hsl(295, 77%, 50%);
+}
+
+.selected-filled-square-P {
+  background-color: hsl(354, 46%, 80%);
+}
+.unselected-filled-square-P {
+  background-color: hsl(354, 46%, 50%);
+}
+
+.selected-filled-square-Q {
+  background-color: hsl(336, 91%, 80%);
+}
+.unselected-filled-square-Q {
+  background-color: hsl(336, 91%, 50%);
+}
+
+.selected-filled-square-R {
+  background-color: hsl(342, 93%, 80%);
+}
+.unselected-filled-square-R {
+  background-color: hsl(342, 93%, 50%);
+}
+
+.selected-filled-square-S {
+  background-color: hsl(23, 17%, 80%);
+}
+.unselected-filled-square-S {
+  background-color: hsl(23, 17%, 50%);
+}
+
+.selected-filled-square-T {
+  background-color: hsl(83, 51%, 80%);
+}
+.unselected-filled-square-T {
+  background-color: hsl(83, 51%, 50%);
+}
+
+.selected-filled-square-U {
+  background-color: hsl(177, 40%, 80%)
+}
+.unselected-filled-square-U {
+  background-color: hsl(177, 40%, 50%)
+}
+
+.selected-filled-square-V {
+  background-color: hsl(8, 88%, 80%);
+}
+.unselected-filled-square-V {
+  background-color: hsl(8, 88%, 50%);
+}
+
+.selected-filled-square-W {
+  background-color: hsl(181, 71%, 80%);
+}
+.unselected-filled-square-W {
+  background-color: hsl(181, 71%, 50%);
+}
+
+.selected-filled-square-X {
+  background-color: hsl(252, 48%, 80%);
+}
+.unselected-filled-square-X {
+  background-color: hsl(252, 48%, 50%);
+}
+
+.selected-filled-square-Y {
+  background-color: hsl(117, 20%, 80%);
+}
+
+.unselected-filled-square-Y {
+  background-color: hsl(117, 20%, 50%);
+}
+
+.selected-filled-square-Z {
+  background-color: hsl(273, 20%, 80%);
+}
+
+.unselected-filled-square-Z {
+  background-color: hsl(273, 20%, 50%);
 }
 
 .empty-square {
   border: none;
-  background-color: #5cdb95;
+  background-color: hsl(0, 0%, 95%);
 }
 
 .grid-container {
@@ -26,7 +210,7 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  background-color: #5cdb95;
+  background-color: hsl(0, 0%, 95%);
 }
 
 .bottom-container {
@@ -35,24 +219,24 @@
 }
 
 .start-button, .back-button {
-  background-color: #41b3a3;
+  background-color: hsl(23, 17%, 42%);
   text-align: center;
   border: none;
 }
 
-.word-score-display, .word-score-display-clickable {
-  background-color: #8ee4af;
+[class*="word-score"] {
+  background-color: hsl(23, 17%, 80%);
   border: inset;
   text-align: center;
 }
 
 .word-score-display-clickable {
   border: outset;
-  background-color: #41b3a3;
+  background-color: hsl(23, 17%, 42%);
 }
 
 @media screen and (orientation: landscape) {
-  .selected-filled-square, .unselected-filled-square, .empty-square {
+  [class*="square"] {
     padding-top: 0.5vh;
     border-radius: 1vh;
     height: 5vh;
@@ -97,7 +281,7 @@
 }
 
 @media screen and (orientation: portrait) {
-  .selected-filled-square, .unselected-filled-square, .empty-square {
+  [class*="square"] {
     padding-top: 0.5vw;
     border-radius: 2vw;
     height: 9vw;
@@ -112,7 +296,7 @@
     height: 144vw;
   }
 
-  .word-score-display, .word-score-display-clickable {
+  [class*="word-score"] {
     padding-top: 0.5vw;
     height: 9vw;
     width: 63vw;

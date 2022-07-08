@@ -12,9 +12,9 @@ function Square(props) {
   if (props.letter === '') {
     square_class = "empty-square";
   } else if (props.selected === true) {
-    square_class = "selected-filled-square";
+    square_class = "selected-filled-square-" + props.letter;
   } else {
-    square_class = "unselected-filled-square";
+    square_class = "unselected-filled-square-" + props.letter;
   }
   return (
     <button className={square_class} onClick={props.onClick}>{props.letter}</button>
