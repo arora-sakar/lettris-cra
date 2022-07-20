@@ -47,6 +47,17 @@ function BackButton(props) {
   );
 }
 
+function GameOverPopup(props) {
+  let popupClass = "game-over-popup-hidden";
+
+  if (props.gameOver === true) {
+    popupClass = "game-over-popup-visible";
+  }
+  return (
+    <button className={popupClass} onClick={props.onClick}>GAME OVER!! <br/> Your Score: {props.score}</button>
+  );
+}
+
 class Lettris extends React.Component {
   constructor(props) {
     super(props);
@@ -73,6 +84,7 @@ class Lettris extends React.Component {
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.handleDisplayClick = this.handleDisplayClick.bind(this);
+    this.handleGameOverButtonClick = this.handleGameOverButtonClick.bind(this);
 
     this.checkValidWord = this.checkValidWord.bind(this);
 
@@ -87,6 +99,7 @@ class Lettris extends React.Component {
       displayText: '',
       displayClickable: false,
       gameInPlay: false,
+      gameOver: false,
     };
   }
   
@@ -192,6 +205,7 @@ class Lettris extends React.Component {
       selected: Array(160).fill(false),
       displayClickable: false,
       displayText:"",
+      gameOver: false,
     });
   }
 
@@ -201,8 +215,8 @@ class Lettris extends React.Component {
     
     this.moveFallingSquares();
     if (this.gameOver === true) {
-      alert("Game Over!! Score: " + this.score);
-      this.resetGame();
+      this.setState({ gameOver: true });
+      setTimeout(this.resetGame, 5000);
       return;
     }
     this.getGridState(gridLetters, gridSelected);
@@ -281,6 +295,10 @@ class Lettris extends React.Component {
                   displayText:"Score: " + this.score});
   }
 
+  handleGameOverButtonClick() {
+    this.resetGame();
+  }
+
   handleBackButtonClick() {
     if (this.gameInPlay === false
       || this.selectedSquares.length === 0) {
@@ -324,6 +342,7 @@ class Lettris extends React.Component {
       <div className="lettris">
         <div className="grid-container">
           {this.renderGrid()}
+          <GameOverPopup gameOver={this.gameOver} score={this.score} onClick={() => this.handleGameOverButtonClick()}/>
         </div>
         <div className="bottom-container">
           <StartButton gameInPlay={this.state.gameInPlay} onClick={() => this.handleStartButtonClick()} />
