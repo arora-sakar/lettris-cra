@@ -17,7 +17,7 @@ function Square(props) {
     square_class = "unselected-filled-square-" + props.letter;
   }
   return (
-    <button className={square_class} onClick={props.onClick}>{props.letter}</button>
+    <div className={square_class} onClick={props.onClick}>{props.letter}</div>
   )
 }
 

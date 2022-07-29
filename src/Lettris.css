@@ -1,5 +1,7 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 [class*="square"] {
@@ -253,7 +255,6 @@
 
 @media screen and (orientation: landscape) {
   [class*="square"] {
-    padding-top: 0.5vh;
     border-radius: 1vh;
     height: 5vh;
     width: 5vh;
