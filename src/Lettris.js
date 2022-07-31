@@ -65,7 +65,7 @@ class Lettris extends React.Component {
     this.gameOver = false;
     this.score = 0;
     this.squareArray = [];
-    for (let i = 0; i < 160; i++) {
+    for (let i = 0; i < 150; i++) {
       this.squareArray.push({alphabet: '',
         selected: -1,
         index: i,
@@ -94,8 +94,8 @@ class Lettris extends React.Component {
     this.getGridState = this.getGridState.bind(this);
 
     this.state = {
-      selected: Array(160).fill(false),
-      letters: Array(160).fill(''),
+      selected: Array(150).fill(false),
+      letters: Array(150).fill(''),
       displayText: '',
       displayClickable: false,
       gameInPlay: false,
@@ -145,7 +145,7 @@ class Lettris extends React.Component {
   moveFallingSquares() {
     var fallingSquaresNext = [];
     for (let i = 0; i < this.fallingSquares.length; i++) {
-      if (Math.floor(this.fallingSquares[i].index/10) >= 15) {
+      if (Math.floor(this.fallingSquares[i].index/10) >= 14) {
         continue;
       }
       if (this.squareArray[this.fallingSquares[i].index + 10].alphabet !== '') {
@@ -174,7 +174,7 @@ class Lettris extends React.Component {
   }
 
   getGridState(gridLetters, gridSelected) {
-    for (let i = 0; i < 160; i++) {
+    for (let i = 0; i < 150; i++) {
       gridLetters[i] = this.squareArray[i].alphabet;
       gridSelected[i] = (this.squareArray[i].selected > -1);
     }
@@ -192,7 +192,7 @@ class Lettris extends React.Component {
     this.selectedSquares = [];
     this.wordScoreDisplayText = [];
     this.score = 0;
-    for (let i = 0; i < 160; i++) {
+    for (let i = 0; i < 150; i++) {
       this.squareArray[i] = {
         alphabet: '',
         selected: -1,
@@ -201,8 +201,8 @@ class Lettris extends React.Component {
     }
 
     this.setState({
-      letters: Array(160).fill(''),
-      selected: Array(160).fill(false),
+      letters: Array(150).fill(''),
+      selected: Array(150).fill(false),
       displayClickable: false,
       displayText:"",
       gameOver: false,
@@ -325,7 +325,7 @@ class Lettris extends React.Component {
 
   renderGrid() {
     var grid = [];
-    for (var i = 0; i < 160; i++) {
+    for (var i = 0; i < 150; i++) {
       grid.push(this.renderSquare(i));
     }
     return grid;

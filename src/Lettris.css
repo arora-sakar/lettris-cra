@@ -277,7 +277,7 @@
     border-radius: 1vh;
     margin: auto;
     width: 50vh;
-    height: 80vh;
+    height: 75vh;
   }
 
   .word-score-display, .word-score-display-clickable {
@@ -320,28 +320,28 @@
   [class*="square"] {
     padding-top: 0.5vw;
     border-radius: 2vw;
-    height: 9vw;
-    width: 9vw;
+    height: 10vw;
+    width: 10vw;
     font-size: 6vw;
   }
 
   .grid-container {
     border-radius: 2vw;
     margin: auto;
-    width: 90vw;
-    height: 144vw;
+    width: 100vw;
+    height: 150vw;
   }
 
   [class*="word-score"] {
     padding-top: 0.5vw;
-    height: 9vw;
-    width: 63vw;
+    height: 10vw;
+    width: 70vw;
     font-size: 6vw;
   }
 
   .bottom-container {
     margin: auto;
-    width: 90vw;
+    width: 100vw;
   }
 
   .start-button {
@@ -355,17 +355,17 @@
   }
 
   .start-button, .back-button {
-    height: 9vw;
-    width: 13.5vw;
+    height: 10vw;
+    width: 15vw;
     font-size: 2.5vw;
   }
 
   [class*="game-over-popup"] {
-    width: 90vw;
-    height: 18vw;
+    width: 100vw;
+    height: 20vw;
     font-size: 6vw;
     border-radius: 2vw;
-    top: 58.5vw;
+    top: 55vw;
   }
 }
 
