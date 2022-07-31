@@ -4,6 +4,15 @@
   padding: 0;
 }
 
+@keyframes wipe-enter {
+  0% {
+    transform: scale(0, .1);
+  }
+  50% {
+    transform: scale(1, .1);
+  }
+}
+
 [class*="square"] {
   text-align: center;
   color: white;
@@ -251,6 +260,9 @@
 
 .game-over-popup-visible {
   visibility: visible;
+  animation-name: wipe-enter;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
 }
 
 @media screen and (orientation: landscape) {
@@ -300,7 +312,7 @@
     height: 10vh;
     font-size: 3vh;
     border-radius: 1vh;
-    top: 35vh;
+    top: 32.5vh;
   }
 }
 
@@ -353,7 +365,7 @@
     height: 18vw;
     font-size: 6vw;
     border-radius: 2vw;
-    top: 63vw;
+    top: 58.5vw;
   }
 }
 
