@@ -340,6 +340,13 @@ class Lettris extends React.Component {
   render() {
     return (
       <div className="lettris">
+        <div className="top-container">
+          <div className="instructions">
+            <i className="material-icons info-icon">information</i>
+          </div>
+          <div className="lettris-name">Lettris</div>
+          <div className="stats">...</div>
+        </div>
         <div className="grid-container">
           {this.renderGrid()}
           <GameOverPopup gameOver={this.gameOver} score={this.score} onClick={() => this.handleGameOverButtonClick()}/>

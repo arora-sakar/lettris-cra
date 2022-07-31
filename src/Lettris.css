@@ -6,10 +6,10 @@
 
 @keyframes wipe-enter {
   0% {
-    transform: scale(0, .1);
+    transform: scale(0, .025);
   }
   50% {
-    transform: scale(1, .1);
+    transform: scale(1, .025);
   }
 }
 
@@ -223,35 +223,39 @@
   background-color: hsl(0, 0%, 95%);
 }
 
-.bottom-container {
+.bottom-container, .top-container {
   position: relative;
   display: flex;
 }
 
+.top-container {
+  border: solid 0.5px;
+}
+
 .start-button, .back-button {
-  background-color: hsl(23, 17%, 42%);
+  background-color: hsl(0, 0%, 95%);
   text-align: center;
-  border: none;
+  border: solid 0.5px;
 }
 
 [class*="word-score"] {
-  background-color: hsl(23, 17%, 80%);
   border: inset;
   text-align: center;
 }
 
 .word-score-display-clickable {
   border: outset;
-  background-color: hsl(23, 17%, 42%);
+  background-color: hsl(0, 0%, 50%);
+  color: white;
 }
 
 [class*="game-over-popup"] {
   position: absolute;
-  background-color: hsl(23, 17%, 42%);
+  background-color:hsl(0, 0%, 95%);
   text-align: center;
   color: black;
   left: 0;
-  border: none;
+  border: outset;
 }
 
 .game-over-popup-hidden {
@@ -263,6 +267,11 @@
   animation-name: wipe-enter;
   animation-duration: 1s;
   animation-iteration-count: 1;
+}
+
+.lettris-name {
+  text-align: center;
+  font-weight: bold;
 }
 
 @media screen and (orientation: landscape) {
@@ -286,9 +295,10 @@
     font-size: 3vh;
   }
 
-  .bottom-container {
+  .bottom-container, .top-container {
     margin: auto;
     width: 50vh;
+    border-radius: 1vh;
   }
 
   .start-button {
@@ -314,13 +324,32 @@
     border-radius: 1vh;
     top: 32.5vh;
   }
+
+  .instructions, .stats {
+    text-align: center;
+    font-size: 3vh;
+    width: 7.5vh;
+    height: 5vh;
+  }
+
+  .instructions {
+    padding: 1vh;
+  }
+
+
+  .lettris-name {
+    padding-top: 0.25vh;
+    font-size: 3vh;
+    width: 35vh;
+    height: 5vh;
+  }
 }
 
 @media screen and (orientation: portrait) {
   [class*="square"] {
-    padding-top: 0.5vw;
     border-radius: 2vw;
     height: 10vw;
+    line-height: 10vw;
     width: 10vw;
     font-size: 6vw;
   }
@@ -333,15 +362,16 @@
   }
 
   [class*="word-score"] {
-    padding-top: 0.5vw;
     height: 10vw;
+    line-height: 10vw;
     width: 70vw;
     font-size: 6vw;
   }
 
-  .bottom-container {
+  .bottom-container, .top-container {
     margin: auto;
     width: 100vw;
+    border-radius: 2vw;
   }
 
   .start-button {
@@ -366,6 +396,24 @@
     font-size: 6vw;
     border-radius: 2vw;
     top: 55vw;
+  }
+
+  .instructions, .stats {
+    text-align: center;
+    font-size: 6vw;
+    width: 15vw;
+    height: 10vw;
+  }
+
+  .instructions {
+    padding: 2vw;
+  }
+
+  .lettris-name {
+    font-size: 8vw;
+    width: 70vw;
+    height: 10vw;
+    line-height: 10vw;
   }
 }
 
