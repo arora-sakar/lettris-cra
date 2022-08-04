@@ -47,22 +47,65 @@ function BackButton(props) {
   );
 }
 
+function InstButton(props) {
+  return (
+    <div className="instructions" onClick={props.onClick}>
+      <i className="material-icons info-icon">information</i>
+    </div>
+  );
+}
+
 function GameOverPopup(props) {
-  let popupClass = "game-over-popup-hidden";
+  let popupClass = "info-center game-over-popup-hidden";
 
   if (props.gameOver === true) {
-    popupClass = "game-over-popup-visible";
+    popupClass = "info-center game-over-popup-visible";
   }
   return (
-    <button className={popupClass} onClick={props.onClick}>GAME OVER!! <br/> Your Score: {props.score}</button>
+    <div className={popupClass}>
+      GAME OVER !!! <br/> Your Score: {props.score} <br/>
+      <button onClick={props.onClick}>OK</button>
+    </div>
   );
+}
+
+function InstPopup(props) {
+  let instPopupClass = "inst-popup-hidden";
+  if (props.instPopupShow === true) {
+    instPopupClass = "inst-popup-visible";
+  }
+  return (
+    <div className={instPopupClass}>
+      <h3 className="info-center">Instructions</h3>
+      <p>Test your vocabulary by making as many words as possible before space for falling alphabets runs out.</p>
+      <ul>
+        <li>
+          Press START/PAUSE button on bottom left to start or pause the game.
+        </li>
+        <li>
+          Tap/Click on any letter and append it to your word.
+        </li>
+        <li>
+          Tap/Click BACK button to remove letter from the end of the word.
+        </li>
+        <li>
+          The word is displayed in the word box at bottom center, between START and BACK buttons.
+        </li>
+        <li>
+          As soon as a valid word of more the 2 letters is formed, the word box becomes active. Tap/Click on it to enter the word.
+        </li>
+        <li>
+          The bigger the word the more points you get for it.
+        </li>
+      </ul>
+    </div>
+  )
 }
 
 class Lettris extends React.Component {
   constructor(props) {
     super(props);
     this.timerId = null;
-    this.gameOver = false;
     this.score = 0;
     this.squareArray = [];
     for (let i = 0; i < 150; i++) {
@@ -89,6 +132,7 @@ class Lettris extends React.Component {
     this.checkValidWord = this.checkValidWord.bind(this);
 
     this.pauseGame = this.pauseGame.bind(this);
+    this.resumeGame = this.resumeGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.updateGrid = this.updateGrid.bind(this);
     this.getGridState = this.getGridState.bind(this);
@@ -100,6 +144,7 @@ class Lettris extends React.Component {
       displayClickable: false,
       gameInPlay: false,
       gameOver: false,
+      instPopupShow: false,
     };
   }
   
@@ -132,8 +177,8 @@ class Lettris extends React.Component {
       }
     }
     if (i < 10) {
-      this.gameOver = true;
       this.pauseGame();
+      this.setState({gameOver: true});
       return;
     }
     for (i = 0; i < 10; i++) {
@@ -186,8 +231,12 @@ class Lettris extends React.Component {
     this.setState({gameInPlay: false});
   }
 
+  resumeGame() {
+    this.timerId = setInterval(this.updateGrid, 1000);
+    this.setState({ gameInPlay: true, instPopupShow: false, gameOver: false });
+  }
+
   resetGame() {
-    this.gameOver = false;
     this.fallingSquares = [];
     this.selectedSquares = [];
     this.wordScoreDisplayText = [];
@@ -206,6 +255,7 @@ class Lettris extends React.Component {
       displayClickable: false,
       displayText:"",
       gameOver: false,
+      gameInPlay: false,
     });
   }
 
@@ -214,8 +264,7 @@ class Lettris extends React.Component {
     let gridSelected = [...this.state.selected];
     
     this.moveFallingSquares();
-    if (this.gameOver === true) {
-      this.setState({ gameOver: true });
+    if (this.state.gameOver === true) {
       setTimeout(this.resetGame, 5000);
       return;
     }
@@ -224,18 +273,21 @@ class Lettris extends React.Component {
   }
 
   handleStartButtonClick() {
-    if (this.timerId === null) {
-      this.timerId = setInterval(this.updateGrid, 1000);
-      this.setState({ gameInPlay: true });
+    if (this.state.gameOver === true) {
+      return;
+    }
+    if (this.state.gameInPlay === false) {
+      this.resumeGame();
     } else {
       this.pauseGame();
     }
   }
 
   handleSquareClick(i) {
-    if (this.state.gameInPlay === false
-      || this.squareArray[i].alphabet === ''
-      || this.squareArray[i].selected > -1)
+    if (this.state.gameInPlay === false ||
+        this.state.gameOver === true ||
+        this.squareArray[i].alphabet === '' ||
+        this.squareArray[i].selected > -1)
       return;
   
     this.squareArray[i].selected = this.selectedSquares.push(this.squareArray[i]) - 1;
@@ -273,7 +325,9 @@ class Lettris extends React.Component {
   
 
   handleDisplayClick() {
-    if (this.state.displayClickable === false) {
+    if (this.state.gameInPlay === false ||
+        this.state.gameOver === true ||
+        this.state.displayClickable === false) {
       return;
     }
 
@@ -299,8 +353,29 @@ class Lettris extends React.Component {
     this.resetGame();
   }
 
+  handleInstClick() {
+    if (this.state.instPopupShow === true) {
+      if (this.instPopupShowDuringGamePlay === true) {
+        this.setState({instPopupShow: false});
+        this.instPopupShowDuringGamePlay = false;
+        this.resumeGame();
+      } else {
+        this.setState({instPopupShow: false});
+      }
+    } else {
+      if (this.state.gameInPlay === true) {
+        this.pauseGame();
+        this.instPopupShowDuringGamePlay = true;
+        this.setState({instPopupShow: true});
+      } else {
+        this.instPopupShowDuringGamePlay = false;
+        this.setState({instPopupShow: true});
+      }
+    }
+  }
+
   handleBackButtonClick() {
-    if (this.gameInPlay === false
+    if (this.state.gameInPlay === false
       || this.selectedSquares.length === 0) {
         return;
       }
@@ -341,15 +416,14 @@ class Lettris extends React.Component {
     return (
       <div className="lettris">
         <div className="top-container">
-          <div className="instructions">
-            <i className="material-icons info-icon">information</i>
-          </div>
+          <InstButton onClick={() => this.handleInstClick()} />
           <div className="lettris-name">Lettris</div>
           <div className="stats">...</div>
         </div>
         <div className="grid-container">
           {this.renderGrid()}
-          <GameOverPopup gameOver={this.gameOver} score={this.score} onClick={() => this.handleGameOverButtonClick()}/>
+          <InstPopup instPopupShow={this.state.instPopupShow} />
+          <GameOverPopup gameOver={this.state.gameOver} score={this.score} onClick={() => this.handleGameOverButtonClick()}/>
         </div>
         <div className="bottom-container">
           <StartButton gameInPlay={this.state.gameInPlay} onClick={() => this.handleStartButtonClick()} />
