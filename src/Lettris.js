@@ -76,23 +76,23 @@ function InstPopup(props) {
   }
   return (
     <div className={instPopupClass}>
-      <h3 className="info-center">Instructions</h3>
-      <p>Test your vocabulary by making as many words as possible before space for falling alphabets runs out.</p>
+      <h3 className="info-center">HOW TO PLAY</h3>
+      <p>Test your vocabulary by making as many words as possible and before space for falling alphabets runs out.</p>
       <ul>
         <li>
           Press START/PAUSE button on bottom left to start or pause the game.
         </li>
         <li>
-          Tap/Click on any letter and append it to your word.
+          Press the square with the alphabet you want to append to your word.
         </li>
         <li>
-          Tap/Click BACK button to remove letter from the end of the word.
+          Press BACK button to remove letter from the end of the word.
         </li>
         <li>
-          The word is displayed in the word box at bottom center, between START and BACK buttons.
+          The word is displayed in the word box between START and BACK buttons.
         </li>
         <li>
-          As soon as a valid word of more the 2 letters is formed, the word box becomes active. Tap/Click on it to enter the word.
+          As soon as a valid word of more the 2 letters is formed, the word box becomes active. Press it to clear the selected squares.
         </li>
         <li>
           The bigger the word the more points you get for it.

@@ -146,10 +146,10 @@
 }
 
 .selected-filled-square-R {
-  background-color: hsl(342, 93%, 80%);
+  background-color: hsl(270, 75%, 80%);
 }
 .unselected-filled-square-R {
-  background-color: hsl(342, 93%, 50%);
+  background-color: hsl(270, 75%, 50%);
 }
 
 .selected-filled-square-S {
@@ -167,10 +167,11 @@
 }
 
 .selected-filled-square-U {
-  background-color: hsl(177, 40%, 80%)
+  background-color: hsl(117, 20%, 80%);
 }
+
 .unselected-filled-square-U {
-  background-color: hsl(177, 40%, 50%)
+  background-color: hsl(117, 20%, 50%);
 }
 
 .selected-filled-square-V {
@@ -195,11 +196,10 @@
 }
 
 .selected-filled-square-Y {
-  background-color: hsl(117, 20%, 80%);
+  background-color: hsl(177, 40%, 80%)
 }
-
 .unselected-filled-square-Y {
-  background-color: hsl(117, 20%, 50%);
+  background-color: hsl(177, 40%, 50%)
 }
 
 .selected-filled-square-Z {
@@ -226,16 +226,17 @@
 .bottom-container, .top-container {
   position: relative;
   display: flex;
+  background-color: hsl(18, 60%, 82%);
 }
 
 .top-container {
-  border: solid 0.5px;
+  border: none;
 }
 
 .start-button, .back-button {
-  background-color: hsl(0, 0%, 95%);
   text-align: center;
-  border: solid 0.5px;
+  border: outset;
+  background-color: hsl(18, 60%, 48%);
 }
 
 [class*="word-score"] {
@@ -245,14 +246,12 @@
 
 .word-score-display-clickable {
   border: outset;
-  background-color: hsl(0, 0%, 50%);
-  color: white;
+  background-color: hsl(18, 60%, 48%);
 }
 
 [class*="popup"] {
   position: absolute;
-  background-color:hsl(0, 0%, 50%);
-  color: whitesmoke;
+  background-color:hsl(18, 60%, 82%);
   left: 0;
   border: outset;
 }
@@ -308,7 +307,15 @@ ul {
   .bottom-container, .top-container {
     margin: auto;
     width: 50vh;
+  }
+
+  .bottom-container {
     border-radius: 1vh;
+  }
+
+  .top-container {
+    border-bottom-left-radius: 1vh;
+    border-bottom-right-radius: 1vh;
   }
 
   .start-button {
@@ -392,7 +399,15 @@ ul {
   .bottom-container, .top-container {
     margin: auto;
     width: 100vw;
+  }
+
+  .bottom-container {
     border-radius: 2vw;
+  }
+
+  .top-container {
+    border-bottom-left-radius: 2vw;
+    border-bottom-right-radius: 2vw;
   }
 
   .start-button {
