@@ -13,6 +13,10 @@
   }
 }
 
+.square-info {
+  display: inline-block;
+}
+
 [class*="square"] {
   text-align: center;
   color: white;
@@ -233,10 +237,14 @@
   border: none;
 }
 
-.start-button, .back-button {
+[class*="button"] {
   text-align: center;
   border: outset;
   background-color: hsl(18, 60%, 48%);
+}
+
+[class*="button-info"] {
+  display: inline-block;
 }
 
 [class*="word-score"] {
@@ -318,19 +326,20 @@ ul {
     border-bottom-right-radius: 1vh;
   }
 
-  .start-button {
+  [class*="start-button"] {
     border-top-left-radius: 1vh;
     border-bottom-left-radius: 1vh;
   }
 
-  .back-button {
+  [class*="back-button"] {
     border-top-right-radius: 1vh;
     border-bottom-right-radius: 1vh;
   }
 
-  .start-button, .back-button {
+  [class*="button"] {
     height: 5vh;
     width: 7.5vh;
+    line-height: 5vh;
     font-size: 1.7vh;
   }
 
@@ -364,10 +373,10 @@ ul {
   [class*="inst-popup"] {
     padding: 2vh;
     width: 45vh;
-    height: 55vh;
+    height: 68vh;
     font-size: 2vh;
     border-radius: 1vh;
-    top: 7.5vh;
+    top: 3vh;
     left: 2.5vh;
     padding-left: 1vh;
   }
@@ -410,26 +419,27 @@ ul {
     border-bottom-right-radius: 2vw;
   }
 
-  .start-button {
+  [class*="start-button"] {
     border-top-left-radius: 2vw;
     border-bottom-left-radius: 2vw;
   }
 
-  .back-button {
+  [class*="back-button"] {
     border-top-right-radius: 2vw;
     border-bottom-right-radius: 2vw;
   }
 
-  .start-button, .back-button {
+  [class*="button"] {
     height: 10vw;
     width: 15vw;
+    line-height: 10vw;
     font-size: 2.5vw;
   }
 
   [class*="game-over-popup"] {
-    padding-top: 2vw;
+    padding-top: 3vw;
     width: 90vw;
-    height: 30vw;
+    height: 35vw;
     font-size: 6vw;
     border-radius: 2vw;
     top: 55vw;
@@ -437,12 +447,12 @@ ul {
   }
 
   [class*="inst-popup"] {
-    padding-top: 10vw;
+    padding-top: 5vw;
     width: 90vw;
-    height: 120vw;
+    height: 132vw;
     font-size: 4vw;
     border-radius: 2vw;
-    top: 15vw;
+    top: 10vw;
     left: 5vw;
     padding-left: 2vw;
   }

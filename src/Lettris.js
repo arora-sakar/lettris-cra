@@ -63,8 +63,8 @@ function GameOverPopup(props) {
   }
   return (
     <div className={popupClass}>
-      GAME OVER !!! <br/> Your Score: {props.score} <br/>
-      <button onClick={props.onClick}>OK</button>
+      GAME OVER !! <br/> Your Score: {props.score} <br/>
+      <button className="game-over-ok-button" onClick={props.onClick}>OK</button>
     </div>
   );
 }
@@ -77,22 +77,26 @@ function InstPopup(props) {
   return (
     <div className={instPopupClass}>
       <h3 className="info-center">HOW TO PLAY</h3>
-      <p>Test your vocabulary by making as many words as possible and before space for falling alphabets runs out.</p>
+      <hr/>
+      <p>Make as many words as possible before space for falling alphabets runs out.</p>
+      <br/>
       <ul>
         <li>
-          Press START/PAUSE button on bottom left to start or pause the game.
+          Press &nbsp;
+          <button className="start-button-info">START</button>/<button className="start-button-info">PAUSE</button> to start or pause the game.
         </li>
         <li>
-          Press the square with the alphabet you want to append to your word.
+          Press the alphabets <div className="unselected-filled-square-A square-info">A</div>-<div className="unselected-filled-square-Z square-info">Z</div> that you want to append to your word.
         </li>
         <li>
-          Press BACK button to remove letter from the end of the word.
+          Press <button className="back-button-info">BACK</button> to remove letter from the end of the word.
         </li>
         <li>
-          The word is displayed in the word box between START and BACK buttons.
+          The word is displayed in between <button className="start-button-info">START</button> and <button className="back-button-info">BACK</button>
         </li>
         <li>
-          As soon as a valid word of more the 2 letters is formed, the word box becomes active. Press it to clear the selected squares.
+          As soon as a valid word of 3 or more letters is formed, it becomes pressable.
+          <div className="word-score-display-clickable">VALID</div>Press it to clear the selected alphabets.
         </li>
         <li>
           The bigger the word the more points you get for it.
