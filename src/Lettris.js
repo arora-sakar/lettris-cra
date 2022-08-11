@@ -63,7 +63,7 @@ function GameOverPopup(props) {
   }
   return (
     <div className={popupClass}>
-      GAME OVER !! <br/> Your Score: {props.score} <br/>
+      GAME OVER !! <br/> Your Score: {props.score} <br/> High Score: {props.highScore} <br/>
       <button className="game-over-ok-button" onClick={props.onClick}>OK</button>
     </div>
   );
@@ -140,6 +140,13 @@ class Lettris extends React.Component {
     this.resetGame = this.resetGame.bind(this);
     this.updateGrid = this.updateGrid.bind(this);
     this.getGridState = this.getGridState.bind(this);
+
+    let tmp = localStorage.getItem("highScore");
+    if (tmp == null) {
+      this.highScore = 0;
+    } else {
+      this.highScore = Number(tmp);
+    }
 
     this.state = {
       selected: Array(150).fill(false),
@@ -344,6 +351,10 @@ class Lettris extends React.Component {
 
     this.getGridState(gridLetters, gridSelected);
     this.score += this.wordScoreDisplayText.length * 2;
+    if (this.score > this.highScore) {
+      localStorage.setItem("highScore", String(this.score));
+      this.highScore = this.score;
+    }
 
     this.selectedSquares = [];
     this.wordScoreDisplayText = [];
@@ -427,7 +438,7 @@ class Lettris extends React.Component {
         <div className="grid-container">
           {this.renderGrid()}
           <InstPopup instPopupShow={this.state.instPopupShow} />
-          <GameOverPopup gameOver={this.state.gameOver} score={this.score} onClick={() => this.handleGameOverButtonClick()}/>
+          <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={() => this.handleGameOverButtonClick()}/>
         </div>
         <div className="bottom-container">
           <StartButton gameInPlay={this.state.gameInPlay} onClick={() => this.handleStartButtonClick()} />

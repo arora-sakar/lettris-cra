@@ -345,7 +345,7 @@ ul {
 
   [class*="game-over-popup"] {
     width: 45vh;
-    height: 15vh;
+    height: 20vh;
     font-size: 3vh;
     border-radius: 1vh;
     top: 32.5vh;
@@ -439,7 +439,7 @@ ul {
   [class*="game-over-popup"] {
     padding-top: 3vw;
     width: 90vw;
-    height: 35vw;
+    height: 40vw;
     font-size: 6vw;
     border-radius: 2vw;
     top: 55vw;
