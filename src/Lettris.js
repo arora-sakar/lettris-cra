@@ -55,6 +55,13 @@ function InstButton(props) {
   );
 }
 
+function StatButton(props) {
+  return (
+    <div className="stats" onClick={props.onClick}>...</div>
+  );
+}
+
+
 function GameOverPopup(props) {
   let popupClass = "info-center game-over-popup-hidden";
 
@@ -92,11 +99,11 @@ function InstPopup(props) {
           Press <button className="back-button-info">BACK</button> to remove letter from the end of the word.
         </li>
         <li>
-          The word is displayed in between <button className="start-button-info">START</button> and <button className="back-button-info">BACK</button>
+          The word is displayed in a word box between <button className="start-button-info">START</button> and <button className="back-button-info">BACK</button>
         </li>
         <li>
-          As soon as a valid word of 3 or more letters is formed, it becomes pressable.
-          <div className="word-score-display-clickable">VALID</div>Press it to clear the selected alphabets.
+          As soon as a valid word of 3 or more letters is formed, word box becomes pressable.
+          <div className="word-score-display-clickable center">VALID</div>Press it to clear the selected alphabets.
         </li>
         <li>
           The bigger the word the more points you get for it.
@@ -104,6 +111,21 @@ function InstPopup(props) {
       </ul>
     </div>
   )
+}
+
+function StatPopup(props) {
+  let statPopupClass = "info-center stat-popup-hidden";
+  if (props.statPopupShow === true) {
+    statPopupClass = "info-center stat-popup-visible";
+  }
+  return (
+    <div className={statPopupClass}>
+      <h3 className="info-center">Statistics</h3>
+      <hr/>
+      <p>Current Score: {props.score} </p>
+      <p>High Score: {props.highScore} </p>
+    </div>
+  );
 }
 
 class Lettris extends React.Component {
@@ -132,6 +154,8 @@ class Lettris extends React.Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.handleDisplayClick = this.handleDisplayClick.bind(this);
     this.handleGameOverButtonClick = this.handleGameOverButtonClick.bind(this);
+    this.handleInstClick = this.handleInstClick.bind(this);
+    this.handleStatClick = this.handleStatClick.bind(this);
 
     this.checkValidWord = this.checkValidWord.bind(this);
 
@@ -156,6 +180,7 @@ class Lettris extends React.Component {
       gameInPlay: false,
       gameOver: false,
       instPopupShow: false,
+      statPopupShow: false,
     };
   }
   
@@ -244,7 +269,7 @@ class Lettris extends React.Component {
 
   resumeGame() {
     this.timerId = setInterval(this.updateGrid, 1000);
-    this.setState({ gameInPlay: true, instPopupShow: false, gameOver: false });
+    this.setState({ gameInPlay: true, instPopupShow: false, statPopupShow: false, gameOver: false });
   }
 
   resetGame() {
@@ -370,22 +395,37 @@ class Lettris extends React.Component {
 
   handleInstClick() {
     if (this.state.instPopupShow === true) {
+      this.setState({instPopupShow: false});
       if (this.instPopupShowDuringGamePlay === true) {
-        this.setState({instPopupShow: false});
         this.instPopupShowDuringGamePlay = false;
         this.resumeGame();
-      } else {
-        this.setState({instPopupShow: false});
       }
     } else {
       if (this.state.gameInPlay === true) {
         this.pauseGame();
         this.instPopupShowDuringGamePlay = true;
-        this.setState({instPopupShow: true});
       } else {
         this.instPopupShowDuringGamePlay = false;
-        this.setState({instPopupShow: true});
       }
+      this.setState({instPopupShow: true, statPopupShow: false});
+    }
+  }
+
+  handleStatClick() {
+    if (this.state.statPopupShow === true) {
+      this.setState({statPopupShow: false});
+      if (this.statPopupShowDuringGamePlay === true) {
+        this.statPopupShowDuringGamePlay = false;
+        this.resumeGame();
+      }
+    } else {
+      if (this.state.gameInPlay === true) {
+        this.pauseGame();
+        this.statPopupShowDuringGamePlay = true;
+      } else {
+        this.statPopupShowDuringGamePlay = false;
+      }
+      this.setState({statPopupShow: true, instPopupShow: false});
     }
   }
 
@@ -433,11 +473,12 @@ class Lettris extends React.Component {
         <div className="top-container">
           <InstButton onClick={() => this.handleInstClick()} />
           <div className="lettris-name">Lettris</div>
-          <div className="stats">...</div>
+          <StatButton onClick={() => this.handleStatClick()} />
         </div>
         <div className="grid-container">
           {this.renderGrid()}
           <InstPopup instPopupShow={this.state.instPopupShow} />
+          <StatPopup statPopupShow={this.state.statPopupShow} score={this.score} highScore={this.highScore} />
           <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={() => this.handleGameOverButtonClick()}/>
         </div>
         <div className="bottom-container">
