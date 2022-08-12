@@ -70,7 +70,7 @@ function GameOverPopup(props) {
   }
   return (
     <div className={popupClass}>
-      GAME OVER !! <br/> Your Score: {props.score} <br/> High Score: {props.highScore} <br/>
+      GAME OVER !! <hr/><br/><p>Your Score: {props.score}</p><p>High Score: {props.highScore}</p>
       <button className="game-over-ok-button" onClick={props.onClick}>OK</button>
     </div>
   );

@@ -355,11 +355,17 @@ ul {
 
   [class*="game-over-popup"] {
     width: 45vh;
-    height: 20vh;
+    height: 22.5vh;
     font-size: 2vh;
     border-radius: 1vh;
     top: 32.5vh;
     left: 2.5vh;
+    padding: 2vh;
+  }
+
+  .game-over-ok-button {
+    margin-top: 2vh;
+    border-radius: 1vh;
   }
 
   .instructions, .stats {
@@ -389,6 +395,7 @@ ul {
     top: 3vh;
     left: 2.5vh;
     padding-left: 1vh;
+    padding-right: 1vh;
   }
 
   [class*="stat-popup"] {
@@ -400,6 +407,7 @@ ul {
     top: 10vh;
     left: 2.5vh;
     padding-left: 1vh;
+    padding-right: 1vh;
   }
 }
 
@@ -458,13 +466,19 @@ ul {
   }
 
   [class*="game-over-popup"] {
-    padding-top: 3vw;
+    padding: 4vw;
     width: 90vw;
-    height: 40vw;
+    height: 45vw;
     font-size: 4vw;
     border-radius: 2vw;
     top: 55vw;
     left: 5vw;
+  }
+
+  .game-over-ok-button {
+    margin-top: 4vw;
+    border-radius: 2vw;
+    font-size: 4vw;
   }
 
   [class*="inst-popup"] {
@@ -476,6 +490,7 @@ ul {
     top: 10vw;
     left: 5vw;
     padding-left: 2vw;
+    padding-right: 2vw;
   }
 
   [class*="stat-popup"] {
@@ -487,6 +502,7 @@ ul {
     top: 10vw;
     left: 5vw;
     padding-left: 2vw;
+    padding-right: 2vw;
   }
 
   .instructions, .stats {
