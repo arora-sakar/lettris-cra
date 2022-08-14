@@ -240,7 +240,7 @@ div {
 .bottom-container, .top-container {
   position: relative;
   display: flex;
-  background-color: hsl(18, 60%, 82%);
+  background-color: hsl(282, 20%, 80%);
 }
 
 .top-container {
@@ -250,7 +250,8 @@ div {
 [class*="button"] {
   text-align: center;
   border: outset;
-  background-color: hsl(18, 60%, 48%);
+  background-color: hsl(282, 20%, 25%);
+  color: white;
 }
 
 [class*="button-info"] {
@@ -264,12 +265,13 @@ div {
 
 .word-score-display-clickable {
   border: outset;
-  background-color: hsl(18, 60%, 48%);
+  background-color: hsl(282, 20%, 25%);
+  color: white;
 }
 
 [class*="popup"] {
   position: absolute;
-  background-color:hsl(18, 60%, 82%);
+  background-color: hsl(282, 20%, 80%);
   left: 0;
   border: outset;
 }
@@ -289,8 +291,7 @@ div {
 }
 
 .lettris-name {
-  text-align: center;
-  font-weight: bold;
+  display: flex;
 }
 
 .info-center {
@@ -310,7 +311,6 @@ ul {
   }
 
   .grid-container {
-    border-radius: 1vh;
     margin: auto;
     width: 50vh;
     height: 75vh;
@@ -329,21 +329,6 @@ ul {
 
   .bottom-container {
     border-radius: 1vh;
-  }
-
-  .top-container {
-    border-bottom-left-radius: 1vh;
-    border-bottom-right-radius: 1vh;
-  }
-
-  [class*="start-button"] {
-    border-top-left-radius: 1vh;
-    border-bottom-left-radius: 1vh;
-  }
-
-  [class*="back-button"] {
-    border-top-right-radius: 1vh;
-    border-bottom-right-radius: 1vh;
   }
 
   [class*="button"] {
@@ -380,10 +365,9 @@ ul {
   }
 
   .lettris-name {
-    padding-top: 0.25vh;
-    font-size: 3vh;
     width: 35vh;
     height: 5vh;
+    line-height: 5vh;
   }
 
   [class*="inst-popup"] {
@@ -421,7 +405,6 @@ ul {
   }
 
   .grid-container {
-    border-radius: 2vw;
     margin: auto;
     width: 100vw;
     height: 150vw;
@@ -441,21 +424,6 @@ ul {
 
   .bottom-container {
     border-radius: 2vw;
-  }
-
-  .top-container {
-    border-bottom-left-radius: 2vw;
-    border-bottom-right-radius: 2vw;
-  }
-
-  [class*="start-button"] {
-    border-top-left-radius: 2vw;
-    border-bottom-left-radius: 2vw;
-  }
-
-  [class*="back-button"] {
-    border-top-right-radius: 2vw;
-    border-bottom-right-radius: 2vw;
   }
 
   [class*="button"] {
@@ -484,7 +452,7 @@ ul {
   [class*="inst-popup"] {
     padding-top: 5vw;
     width: 90vw;
-    height: 132vw;
+    height: 135vw;
     font-size: 4vw;
     border-radius: 2vw;
     top: 10vw;

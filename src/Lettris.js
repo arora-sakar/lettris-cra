@@ -102,7 +102,7 @@ function InstPopup(props) {
           The word is displayed in a word box between <button className="start-button-info">START</button> and <button className="back-button-info">BACK</button>
         </li>
         <li>
-          As soon as a valid word of 3 or more letters is formed, word box becomes pressable.
+          As soon as a valid word of 3 or more alphabets is formed, word box becomes pressable.
           <div className="word-score-display-clickable center">VALID</div>Press it to clear the selected alphabets.
         </li>
         <li>
@@ -472,7 +472,15 @@ class Lettris extends React.Component {
       <div className="lettris">
         <div className="top-container">
           <InstButton onClick={() => this.handleInstClick()} />
-          <div className="lettris-name">Lettris</div>
+          <div className="lettris-name">
+            <div className="unselected-filled-square-L">L</div>
+            <div className="unselected-filled-square-E">E</div>
+            <div className="unselected-filled-square-T">T</div>
+            <div className="unselected-filled-square-T">T</div>
+            <div className="unselected-filled-square-R">R</div>
+            <div className="unselected-filled-square-I">I</div>
+            <div className="unselected-filled-square-S">S</div>
+          </div>
           <StatButton onClick={() => this.handleStatClick()} />
         </div>
         <div className="grid-container">
