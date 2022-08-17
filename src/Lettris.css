@@ -240,7 +240,7 @@ div {
 .bottom-container, .top-container {
   position: relative;
   display: flex;
-  background-color: hsl(282, 20%, 80%);
+  background-color: hsl(282, 20%, 65%);
 }
 
 .top-container {

@@ -2,6 +2,8 @@
 import React from 'react';
 import './Lettris.css';
 
+const LocalWordsVersion = "localWordsV1";
+
 function GetPseudorandomLetter() {
   const WeightedLetters = "EEEEEEEEEEAAAAAAAARRRRRRRIIIIIIIOOOOOOOTTTTTTTNNNNNNNSSSSSSLLLLLCCCCCUUUUDDDPPPMMMHHHGGBBFFYYWKVXZJQ";
   return WeightedLetters[Math.floor(Math.random() * WeightedLetters.length)];
@@ -134,6 +136,7 @@ class Lettris extends React.Component {
     this.timerId = null;
     this.score = 0;
     this.squareArray = [];
+    this.useLocalWords =  false;
     for (let i = 0; i < 150; i++) {
       this.squareArray.push({alphabet: '',
         selected: -1,
@@ -185,6 +188,27 @@ class Lettris extends React.Component {
   }
   
   componentDidMount() {
+    if (localStorage.getItem(LocalWordsVersion) === "true") {
+      //console.log("Found local words!!");
+      return;
+    }
+    //console.log("No local words!! Fetching words.txt");
+    fetch(process.env.PUBLIC_URL + "words.txt")
+    .then(response => {
+      return response.text();
+    })
+    .then(data => {
+      let tmpList = data.split("\n");
+      for (let i = 0; i < tmpList.length; i++) {
+        let word = tmpList[i].replace("\r", "");
+        if (localStorage.getItem(word) === null) {
+          localStorage.setItem(word, "valid");
+        }
+      }
+      localStorage.setItem(LocalWordsVersion, "true");
+      //console.log("All words from words.txt stored in local storage.");
+    })
+    .catch(error => console.error(error));
   }
 
   checkValidWord(word) {
@@ -192,17 +216,22 @@ class Lettris extends React.Component {
       this.setState({displayClickable: false});
       return;
     }
-    
+
+    //console.log("checking valid word with local words.");
+    if (localStorage.getItem(word) === "valid") {
+      this.setState({displayClickable: true});
+      return;
+    }
+
+    this.setState({displayClickable: false});
+    //console.log("checking valid word with dictionary api.");
     fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
     .then(response => {
-      let clickable = false;
       if (response.status === 200) {
-        clickable = true;
+        localStorage.setItem(word, "valid");
+        this.checkValidWord(this.wordScoreDisplayText.join(''));
       }
-      this.setState({displayClickable: clickable});
-    })
-    .catch(error => this.setState({displayClickable: false})
-    );
+    });
   }
 
   refreshFallingSquares() {
