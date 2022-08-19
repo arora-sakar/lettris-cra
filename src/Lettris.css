@@ -240,7 +240,7 @@ div {
 .bottom-container, .top-container {
   position: relative;
   display: flex;
-  background-color: hsl(282, 20%, 65%);
+  background-color: white;
 }
 
 .top-container {
@@ -271,7 +271,7 @@ div {
 
 [class*="popup"] {
   position: absolute;
-  background-color: hsl(282, 20%, 80%);
+  background-color: white;
   left: 0;
   border: outset;
 }
