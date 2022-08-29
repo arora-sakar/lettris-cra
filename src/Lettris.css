@@ -396,6 +396,16 @@ ul {
 }
 
 @media screen and (orientation: portrait) {
+  .lettris {
+    height: 100vh;
+    width: 100vw;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
+  }
+
   [class*="square"] {
     border-radius: 2vw;
     height: 10vw;
@@ -405,9 +415,7 @@ ul {
   }
 
   .grid-container {
-    margin: auto;
     width: 100vw;
-    height: 150vw;
   }
 
   [class*="word-score"] {
@@ -418,11 +426,18 @@ ul {
   }
 
   .bottom-container, .top-container {
-    margin: auto;
     width: 100vw;
   }
 
+  .top-container {
+    margin-top: 0;
+    margin-bottom: auto;
+    background-color: hsl(282, 20%, 25%);
+  }
+
   .bottom-container {
+    margin-top: auto;
+    margin-bottom: 0;
     border-radius: 2vw;
   }
 
@@ -478,6 +493,7 @@ ul {
     font-size: 6vw;
     width: 15vw;
     height: 10vw;
+    color: white;
   }
 
   .instructions {
