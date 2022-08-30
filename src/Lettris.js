@@ -19,7 +19,7 @@ function Square(props) {
     square_class = "unselected-filled-square-" + props.letter;
   }
   return (
-    <div className={square_class} onClick={props.onClick}>{props.letter}</div>
+    <div className={square_class} onMouseDown={props.onMouseDown}>{props.letter}</div>
   )
 }
 
@@ -492,7 +492,7 @@ class Lettris extends React.Component {
 
   renderSquare(i) {
     return (
-      <Square selected={this.state.selected[i]} letter={this.state.letters[i]} onClick={() => this.handleSquareClick(i)} />
+      <Square selected={this.state.selected[i]} letter={this.state.letters[i]} onMouseDown={() => this.handleSquareClick(i)} />
     );
   }
 
