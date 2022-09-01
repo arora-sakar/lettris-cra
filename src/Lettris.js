@@ -246,8 +246,14 @@ class Lettris extends React.Component {
       this.setState({gameOver: true});
       return;
     }
+    const amap = new Map();
     for (i = 0; i < 10; i++) {
-      this.squareArray[i].alphabet = GetPseudorandomLetter();
+      let a = '';
+      do {
+        a = GetPseudorandomLetter();
+      } while (amap.has(a));
+      amap.set(a, true);
+      this.squareArray[i].alphabet = a;
       this.fallingSquares.push(this.squareArray[i]);
     }
   }
@@ -351,10 +357,9 @@ class Lettris extends React.Component {
   handleSquareClick(i) {
     if (this.state.gameInPlay === false ||
         this.state.gameOver === true ||
-        this.squareArray[i].alphabet === '' ||
-        this.squareArray[i].selected > -1)
+        this.squareArray[i].selected > -1) {
       return;
-  
+    }
     this.squareArray[i].selected = this.selectedSquares.push(this.squareArray[i]) - 1;
     this.wordScoreDisplayText.push(this.squareArray[i].alphabet);
     let word = this.wordScoreDisplayText.join('');
