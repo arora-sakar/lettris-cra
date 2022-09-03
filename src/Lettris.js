@@ -356,9 +356,22 @@ class Lettris extends React.Component {
   handleSquareClick = (i) => {
     if (this.state.gameInPlay === false ||
         this.state.gameOver === true ||
-        this.squareArray[i].alphabet === '' ||
         this.squareArray[i].selected > -1) {
       return;
+    }
+
+    if (this.squareArray[i].alphabet === '' && this.squareArray[i+10].alphabet !== '') {
+        let flag = false;
+        for (let s of this.fallingSquares) {
+            if (s.index === i+10) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag === false) {
+            return;
+        }
+        i = i + 10;
     }
     this.squareArray[i].selected = this.selectedSquares.push(this.squareArray[i]) - 1;
     this.wordScoreDisplayText.push(this.squareArray[i].alphabet);
