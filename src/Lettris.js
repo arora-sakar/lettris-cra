@@ -19,7 +19,7 @@ function Square(props) {
     square_class = "unselected-filled-square-" + props.letter;
   }
   return (
-    <div className={square_class} onMouseDown={props.onMouseDown}>{props.letter}</div>
+    <div className={square_class} onClick={props.onClick}>{props.letter}</div>
   )
 }
 
@@ -153,7 +153,6 @@ class Lettris extends React.Component {
     this.dropUpperSquares = this.dropUpperSquares.bind(this);
 
     this.handleStartButtonClick = this.handleStartButtonClick.bind(this);
-    this.handleSquareClick = this.handleSquareClick.bind(this);
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.handleDisplayClick = this.handleDisplayClick.bind(this);
     this.handleGameOverButtonClick = this.handleGameOverButtonClick.bind(this);
@@ -354,9 +353,10 @@ class Lettris extends React.Component {
     }
   }
 
-  handleSquareClick(i) {
+  handleSquareClick = (i) => {
     if (this.state.gameInPlay === false ||
         this.state.gameOver === true ||
+        this.squareArray[i].alphabet === '' ||
         this.squareArray[i].selected > -1) {
       return;
     }
@@ -375,7 +375,7 @@ class Lettris extends React.Component {
       selected: gridSelected,
       displayText: word,
     });
-  }
+  };
 
   dropUpperSquares(index) {
     if (this.squareArray[index].selected === -1)
@@ -497,7 +497,7 @@ class Lettris extends React.Component {
 
   renderSquare(i) {
     return (
-      <Square selected={this.state.selected[i]} letter={this.state.letters[i]} onMouseDown={() => this.handleSquareClick(i)} />
+      <Square selected={this.state.selected[i]} letter={this.state.letters[i]} onClick={this.handleSquareClick.bind(this, i)} />
     );
   }
 
@@ -505,7 +505,7 @@ class Lettris extends React.Component {
     return (
       <div className="lettris">
         <div className="top-container">
-          <InstButton onClick={() => this.handleInstClick()} />
+          <InstButton onClick={this.handleInstClick} />
           <div className="lettris-name">
             <div className="unselected-filled-square-L">L</div>
             <div className="unselected-filled-square-E">E</div>
@@ -515,20 +515,20 @@ class Lettris extends React.Component {
             <div className="unselected-filled-square-I">I</div>
             <div className="unselected-filled-square-S">S</div>
           </div>
-          <StatButton onClick={() => this.handleStatClick()} />
+          <StatButton onClick={this.handleStatClick} />
         </div>
         <div className="grid-container">
           {this.renderGrid()}
           <InstPopup instPopupShow={this.state.instPopupShow} />
           <StatPopup statPopupShow={this.state.statPopupShow} score={this.score} highScore={this.highScore} />
-          <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={() => this.handleGameOverButtonClick()}/>
+          <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={this.handleGameOverButtonClick}/>
         </div>
         <div className="bottom-container">
-          <StartButton gameInPlay={this.state.gameInPlay} onClick={() => this.handleStartButtonClick()} />
+          <StartButton gameInPlay={this.state.gameInPlay} onClick={this.handleStartButtonClick} />
           <WordAndScoreDisplay displayText={this.state.displayText}
            displayClickable={this.state.displayClickable}
-           onClick={() => this.handleDisplayClick()}/>
-          <BackButton onClick={() => this.handleBackButtonClick()} />
+           onClick={this.handleDisplayClick}/>
+          <BackButton onClick={this.handleBackButtonClick} />
         </div>
       </div>
     );
