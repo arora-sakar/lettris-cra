@@ -396,8 +396,8 @@ ul {
 }
 
 @media screen and (orientation: portrait) {
-  .lettris {
-    height: 100vh;
+  #lettris {
+    height: 89.76vh;
     width: 100vw;
     background-color: red;
     display: flex;
@@ -408,19 +408,20 @@ ul {
 
   [class*="square"] {
     border-radius: 2vw;
-    height: 10vw;
-    line-height: 10vw;
+    height: 5.28vh;
+    line-height: 5.28vh;
     width: 10vw;
     font-size: 6vw;
   }
 
   .grid-container {
     width: 100vw;
+    height: 79.2vh;
   }
 
   [class*="word-score"] {
-    height: 10vw;
-    line-height: 10vw;
+    height: 5.28vh;
+    line-height: 5.28vh;
     width: 70vw;
     font-size: 6vw;
   }
@@ -442,47 +443,47 @@ ul {
   }
 
   [class*="button"] {
-    height: 10vw;
+    height: 5.28vh;
     width: 15vw;
-    line-height: 10vw;
+    line-height: 5.28vh;
     font-size: 2.5vw;
   }
 
   [class*="game-over-popup"] {
     padding: 4vw;
     width: 90vw;
-    height: 45vw;
+    height: 25vh;
     font-size: 4vw;
     border-radius: 2vw;
-    top: 55vw;
+    top: 5.5vh;
     left: 5vw;
   }
 
   .game-over-ok-button {
-    margin-top: 4vw;
+    margin-top: 2vh;
     border-radius: 2vw;
     font-size: 4vw;
   }
 
   [class*="inst-popup"] {
-    padding-top: 5vw;
+    padding-top: 2vh;
     width: 90vw;
-    height: 135vw;
+    height: 73.92vh;
     font-size: 4vw;
     border-radius: 2vw;
-    top: 10vw;
+    top: 2.2vh;
     left: 5vw;
     padding-left: 2vw;
     padding-right: 2vw;
   }
 
   [class*="stat-popup"] {
-    padding-top: 5vw;
+    padding-top: 2vh;
     width: 90vw;
-    height: 30vw;
+    height: 22vh;
     font-size: 4vw;
     border-radius: 2vw;
-    top: 10vw;
+    top: 5.5vh;
     left: 5vw;
     padding-left: 2vw;
     padding-right: 2vw;
@@ -492,7 +493,7 @@ ul {
     text-align: center;
     font-size: 6vw;
     width: 15vw;
-    height: 10vw;
+    height: 5.28vh;
     color: white;
   }
 
@@ -501,10 +502,9 @@ ul {
   }
 
   .lettris-name {
-    font-size: 8vw;
     width: 70vw;
-    height: 10vw;
-    line-height: 10vw;
+    height: 5.28vh;
+    line-height: 5.28vh;
   }
 }
 

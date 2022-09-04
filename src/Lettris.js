@@ -516,7 +516,7 @@ class Lettris extends React.Component {
 
   render() {
     return (
-      <div className="lettris">
+      <div id="lettris">
         <div className="top-container">
           <InstButton onClick={this.handleInstClick} />
           <div className="lettris-name">
