@@ -52,7 +52,7 @@ function BackButton(props) {
 function InstButton(props) {
   return (
     <div className="instructions" onClick={props.onClick}>
-      <i className="material-icons info-icon">information</i>
+      i
     </div>
   );
 }
@@ -95,7 +95,7 @@ function InstPopup(props) {
           <button className="start-button-info">START</button>/<button className="start-button-info">PAUSE</button> to start or pause the game.
         </li>
         <li>
-          Press the alphabets <div className="unselected-filled-square-A square-info">A</div>-<div className="unselected-filled-square-Z square-info">Z</div> that you want to append to your word.
+          Press the alphabets <div className="alphabet-info-A">A</div>-<div className="alphabet-info-Z">Z</div> that you want to append to your word.
         </li>
         <li>
           Press <button className="back-button-info">BACK</button> to remove letter from the end of the word.
@@ -335,7 +335,7 @@ class Lettris extends React.Component {
     
     this.moveFallingSquares();
     if (this.state.gameOver === true) {
-      setTimeout(this.resetGame, 5000);
+      setTimeout(this.resetGame, 10000);
       return;
     }
     this.getGridState(gridLetters, gridSelected);
@@ -516,34 +516,24 @@ class Lettris extends React.Component {
 
   render() {
     return (
-      <div id="lettris">
-        <div className="top-container">
-          <InstButton onClick={this.handleInstClick} />
-          <div className="lettris-name">
-            <div className="unselected-filled-square-L">L</div>
-            <div className="unselected-filled-square-E">E</div>
-            <div className="unselected-filled-square-T">T</div>
-            <div className="unselected-filled-square-T">T</div>
-            <div className="unselected-filled-square-R">R</div>
-            <div className="unselected-filled-square-I">I</div>
-            <div className="unselected-filled-square-S">S</div>
-          </div>
-          <StatButton onClick={this.handleStatClick} />
-        </div>
-        <div className="grid-container">
-          {this.renderGrid()}
-          <InstPopup instPopupShow={this.state.instPopupShow} />
-          <StatPopup statPopupShow={this.state.statPopupShow} score={this.score} highScore={this.highScore} />
-          <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={this.handleGameOverButtonClick}/>
-        </div>
-        <div className="bottom-container">
-          <StartButton gameInPlay={this.state.gameInPlay} onClick={this.handleStartButtonClick} />
-          <WordAndScoreDisplay displayText={this.state.displayText}
-           displayClickable={this.state.displayClickable}
-           onClick={this.handleDisplayClick}/>
-          <BackButton onClick={this.handleBackButtonClick} />
-        </div>
-      </div>
+        <><div className="top-container">
+            <InstButton onClick={this.handleInstClick} />
+            <div className="lettris-name">
+                Lettris
+            </div>
+            <StatButton onClick={this.handleStatClick} />
+        </div><div className="grid-container">
+                {this.renderGrid()}
+                <InstPopup instPopupShow={this.state.instPopupShow} />
+                <StatPopup statPopupShow={this.state.statPopupShow} score={this.score} highScore={this.highScore} />
+                <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={this.handleGameOverButtonClick} />
+            </div><div className="bottom-container">
+                <StartButton gameInPlay={this.state.gameInPlay} onClick={this.handleStartButtonClick} />
+                <WordAndScoreDisplay displayText={this.state.displayText}
+                    displayClickable={this.state.displayClickable}
+                    onClick={this.handleDisplayClick} />
+                <BackButton onClick={this.handleBackButtonClick} />
+            </div></>
     );
   }
 };
