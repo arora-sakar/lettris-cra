@@ -270,13 +270,13 @@ div {
 
 .top-container {
   border: none;
-  background-image: linear-gradient(to right, hsl(282, 20%, 25%),white,white,white,white,white,hsl(282, 20%, 25%));
+  background-color: #787878;
 }
 
 [class*="button"] {
   text-align: center;
   border: outset;
-  background-color: hsl(282, 20%, 25%);
+  background-color: #787878;
   color: white;
 }
 
@@ -292,7 +292,7 @@ div {
 
 .word-score-display-clickable {
   border: outset;
-  background-color: hsl(282, 20%, 25%);
+  background-color: #787878;
   color: white;
 }
 
@@ -459,7 +459,7 @@ ul {
 
   .bottom-container {
     bottom: 0;
-    background-image: linear-gradient(to right, hsl(282, 20%, 25%),white,white,white,white,white,hsl(282, 20%, 25%));
+    background-color: white;
   }
 
   [class*="button"] {
@@ -527,6 +527,10 @@ ul {
 
   .lettris-name {
     width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;;
   }
 }
 
