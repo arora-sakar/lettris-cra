@@ -1,87 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './Lettris.css';
 
 const LocalWordsVersion = "localWordsV1";
 
-function GetPseudorandomLetter() {
-  const WeightedLetters = "EEEEEEEEEEAAAAAAAARRRRRRRIIIIIIIOOOOOOOTTTTTTTNNNNNNNSSSSSSLLLLLCCCCCUUUUDDDPPPMMMHHHGGBBFFYYWKVXZJQ";
-  return WeightedLetters[Math.floor(Math.random() * WeightedLetters.length)];
-}
+// Helper functions moved outside component for cleaner organization
+const getPseudorandomLetter = () => {
+  const weightedLetters = "EEEEEEEEEEAAAAAAAARRRRRRRIIIIIIIOOOOOOOTTTTTTTNNNNNNNSSSSSSLLLLLCCCCCUUUUDDDPPPMMMHHHGGBBFFYYWKVXZJQ";
+  return weightedLetters[Math.floor(Math.random() * weightedLetters.length)];
+};
 
-function Square(props) {
-  let square_class = '';
-  if (props.letter === '') {
-    square_class = "empty-square";
-  } else if (props.selected === true) {
-    square_class = "selected-filled-square-" + props.letter;
+// UI Components converted to functional components with React.memo for performance
+const Square = React.memo(({ letter, selected, onClick }) => {
+  let squareClass = '';
+  if (letter === '') {
+    squareClass = "empty-square";
+  } else if (selected === true) {
+    squareClass = "selected-filled-square-" + letter;
   } else {
-    square_class = "unselected-filled-square-" + props.letter;
+    squareClass = "unselected-filled-square-" + letter;
   }
+  
   return (
-    <div className={square_class} onClick={props.onClick}>{props.letter}</div>
-  )
-}
-
-function StartButton(props) {
-  var caption = "START";
-  if (props.gameInPlay === true) {
-    caption = "PAUSE";
-  }
-  return (
-    <button className="start-button" onClick={props.onClick}>{caption}</button>
+    <div className={squareClass} onClick={onClick}>{letter}</div>
   );
-}
+});
 
-function WordAndScoreDisplay(props) {
-  let displayClass = "word-score-display";
-  if (props.displayClickable === true) {
-    displayClass = "word-score-display-clickable";
-  }
+const StartButton = React.memo(({ gameInPlay, onClick }) => {
+  const caption = gameInPlay ? "PAUSE" : "START";
   return (
-    <div className={displayClass} onClick={props.onClick}>{props.displayText}</div>
+    <button className="start-button" onClick={onClick}>{caption}</button>
   );
-}
+});
 
-function BackButton(props) {
+const WordAndScoreDisplay = React.memo(({ displayText, displayClickable, onClick }) => {
+  const displayClass = displayClickable ? "word-score-display-clickable" : "word-score-display";
   return (
-    <button className="back-button" onClick={props.onClick}>BACK</button>
+    <div className={displayClass} onClick={onClick}>{displayText}</div>
   );
-}
+});
 
-function InstButton(props) {
+const BackButton = React.memo(({ onClick }) => {
   return (
-    <div className="instructions" onClick={props.onClick}>
-      i
-    </div>
+    <button className="back-button" onClick={onClick}>BACK</button>
   );
-}
+});
 
-function StatButton(props) {
+const InstButton = React.memo(({ onClick }) => {
   return (
-    <div className="stats" onClick={props.onClick}>...</div>
+    <div className="instructions" onClick={onClick}>i</div>
   );
-}
+});
 
+const StatButton = React.memo(({ onClick }) => {
+  return (
+    <div className="stats" onClick={onClick}>...</div>
+  );
+});
 
-function GameOverPopup(props) {
-  let popupClass = "info-center game-over-popup-hidden";
-
-  if (props.gameOver === true) {
-    popupClass = "info-center game-over-popup-visible";
-  }
+const GameOverPopup = React.memo(({ gameOver, score, highScore, onClick }) => {
+  const popupClass = gameOver 
+    ? "info-center game-over-popup-visible" 
+    : "info-center game-over-popup-hidden";
+    
   return (
     <div className={popupClass}>
-      GAME OVER !! <hr/><br/><p>Your Score: {props.score}</p><p>High Score: {props.highScore}</p>
-      <button className="game-over-ok-button" onClick={props.onClick}>OK</button>
+      GAME OVER !! <hr/><br/><p>Your Score: {score}</p><p>High Score: {highScore}</p>
+      <button className="game-over-ok-button" onClick={onClick}>OK</button>
     </div>
   );
-}
+});
 
-function InstPopup(props) {
-  let instPopupClass = "inst-popup-hidden";
-  if (props.instPopupShow === true) {
-    instPopupClass = "inst-popup-visible";
-  }
+const InstPopup = React.memo(({ instPopupShow }) => {
+  const instPopupClass = instPopupShow ? "inst-popup-visible" : "inst-popup-hidden";
+  
   return (
     <div className={instPopupClass}>
       <h3 className="info-center">HOW TO PLAY</h3>
@@ -111,430 +102,461 @@ function InstPopup(props) {
         </li>
       </ul>
     </div>
-  )
-}
+  );
+});
 
-function StatPopup(props) {
-  let statPopupClass = "info-center stat-popup-hidden";
-  if (props.statPopupShow === true) {
-    statPopupClass = "info-center stat-popup-visible";
-  }
+const StatPopup = React.memo(({ statPopupShow, score, highScore }) => {
+  const statPopupClass = statPopupShow 
+    ? "info-center stat-popup-visible" 
+    : "info-center stat-popup-hidden";
+    
   return (
     <div className={statPopupClass}>
       <h3 className="info-center">Statistics</h3>
       <hr/>
-      <p>Current Score: {props.score} </p>
-      <p>High Score: {props.highScore} </p>
+      <p>Current Score: {score} </p>
+      <p>High Score: {highScore} </p>
     </div>
   );
-}
+});
 
-class Lettris extends React.Component {
-  constructor(props) {
-    super(props);
-    this.timerId = null;
-    this.score = 0;
-    this.squareArray = [];
-    this.useLocalWords =  false;
+// Main component converted to functional component with hooks
+const Lettris = () => {
+  // State variables
+  const [letters, setLetters] = useState(Array(150).fill(''));
+  const [selected, setSelected] = useState(Array(150).fill(false));
+  const [displayText, setDisplayText] = useState('');
+  const [displayClickable, setDisplayClickable] = useState(false);
+  const [gameInPlay, setGameInPlay] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+  const [instPopupShow, setInstPopupShow] = useState(false);
+  const [statPopupShow, setStatPopupShow] = useState(false);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const storedHighScore = localStorage.getItem("highScore");
+    return storedHighScore ? Number(storedHighScore) : 0;
+  });
+
+  // Refs for values that don't trigger re-renders
+  const timerIdRef = useRef(null);
+  const instPopupShowDuringGamePlayRef = useRef(false);
+  const statPopupShowDuringGamePlayRef = useRef(false);
+  
+  // Refs for game state
+  const squareArrayRef = useRef([]);
+  const selectedSquaresRef = useRef([]);
+  const fallingSquaresRef = useRef([]);
+  const wordScoreDisplayTextRef = useRef([]);
+
+  // Initialize squareArray on component mount
+  useEffect(() => {
     for (let i = 0; i < 150; i++) {
-      this.squareArray.push({alphabet: '',
+      squareArrayRef.current.push({
+        alphabet: '',
         selected: -1,
         index: i,
       });
     }
+  }, []);
 
-    this.selectedSquares = [];
-    this.fallingSquares = [];
-    this.wordScoreDisplayText = [];
-
-    this.refreshFallingSquares = this.refreshFallingSquares.bind(this);
-    this.moveFallingSquares = this.moveFallingSquares.bind(this);
-    this.dropUpperSquares = this.dropUpperSquares.bind(this);
-
-    this.handleStartButtonClick = this.handleStartButtonClick.bind(this);
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-    this.handleDisplayClick = this.handleDisplayClick.bind(this);
-    this.handleGameOverButtonClick = this.handleGameOverButtonClick.bind(this);
-    this.handleInstClick = this.handleInstClick.bind(this);
-    this.handleStatClick = this.handleStatClick.bind(this);
-
-    this.checkValidWord = this.checkValidWord.bind(this);
-
-    this.pauseGame = this.pauseGame.bind(this);
-    this.resumeGame = this.resumeGame.bind(this);
-    this.resetGame = this.resetGame.bind(this);
-    this.updateGrid = this.updateGrid.bind(this);
-    this.getGridState = this.getGridState.bind(this);
-
-    let tmp = localStorage.getItem("highScore");
-    if (tmp == null) {
-      this.highScore = 0;
-    } else {
-      this.highScore = Number(tmp);
-    }
-
-    this.state = {
-      selected: Array(150).fill(false),
-      letters: Array(150).fill(''),
-      displayText: '',
-      displayClickable: false,
-      gameInPlay: false,
-      gameOver: false,
-      instPopupShow: false,
-      statPopupShow: false,
-    };
-  }
-  
-  componentDidMount() {
-    if (localStorage.getItem(LocalWordsVersion) === "true") {
-      //console.log("Found local words!!");
-      return;
-    }
-    //console.log("No local words!! Fetching words.txt");
-    fetch(process.env.PUBLIC_URL + "words.txt")
-    .then(response => {
-      return response.text();
-    })
-    .then(data => {
-      let tmpList = data.split("\n");
-      for (let i = 0; i < tmpList.length; i++) {
-        let word = tmpList[i].replace("\r", "");
-        if (localStorage.getItem(word) === null) {
-          localStorage.setItem(word, "valid");
-        }
+  // Fetch words.txt for dictionary
+  useEffect(() => {
+    const loadDictionary = async () => {
+      if (localStorage.getItem(LocalWordsVersion) === "true") {
+        return;
       }
-      localStorage.setItem(LocalWordsVersion, "true");
-      //console.log("All words from words.txt stored in local storage.");
-    })
-    .catch(error => console.error(error));
-  }
+      
+      try {
+        const response = await fetch(process.env.PUBLIC_URL + "words.txt");
+        const data = await response.text();
+        let tmpList = data.split("\n");
+        
+        for (let i = 0; i < tmpList.length; i++) {
+          let word = tmpList[i].replace("\r", "");
+          if (localStorage.getItem(word) === null) {
+            localStorage.setItem(word, "valid");
+          }
+        }
+        
+        localStorage.setItem(LocalWordsVersion, "true");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    loadDictionary();
+  }, []);
 
-  checkValidWord(word) {
+  // Check if word is valid
+  const checkValidWord = useCallback(async (word) => {
     if (word.length < 3) {
-      this.setState({displayClickable: false});
+      setDisplayClickable(false);
       return;
     }
 
-    //console.log("checking valid word with local words.");
     if (localStorage.getItem(word) === "valid") {
-      this.setState({displayClickable: true});
+      setDisplayClickable(true);
       return;
     }
 
-    this.setState({displayClickable: false});
-    //console.log("checking valid word with dictionary api.");
-    fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
-    .then(response => {
+    setDisplayClickable(false);
+    
+    try {
+      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
       if (response.status === 200) {
         localStorage.setItem(word, "valid");
-        this.checkValidWord(this.wordScoreDisplayText.join(''));
+        checkValidWord(wordScoreDisplayTextRef.current.join(''));
       }
-    });
-  }
+    } catch (error) {
+      console.error("Error checking word:", error);
+    }
+  }, []);
 
-  refreshFallingSquares() {
+  // Refresh falling squares
+  const refreshFallingSquares = useCallback(() => {
     let i = 0;
     for (; i < 10; i++) {
-      if (this.squareArray[i].alphabet !== '') {
+      if (squareArrayRef.current[i].alphabet !== '') {
         break;
       }
     }
+    
     if (i < 10) {
-      this.pauseGame();
-      this.setState({gameOver: true});
+      pauseGame();
+      setGameOver(true);
       return;
     }
+    
     const amap = new Map();
     for (i = 0; i < 10; i++) {
       let a = '';
       do {
-        a = GetPseudorandomLetter();
+        a = getPseudorandomLetter();
       } while (amap.has(a));
+      
       amap.set(a, true);
-      this.squareArray[i].alphabet = a;
-      this.fallingSquares.push(this.squareArray[i]);
+      squareArrayRef.current[i].alphabet = a;
+      fallingSquaresRef.current.push(squareArrayRef.current[i]);
     }
-  }
+  }, []);
 
-  moveFallingSquares() {
+  // Move falling squares
+  const moveFallingSquares = useCallback(() => {
     var fallingSquaresNext = [];
-    for (let i = 0; i < this.fallingSquares.length; i++) {
-      if (Math.floor(this.fallingSquares[i].index/10) >= 14) {
+    for (let i = 0; i < fallingSquaresRef.current.length; i++) {
+      if (Math.floor(fallingSquaresRef.current[i].index/10) >= 14) {
         continue;
       }
-      if (this.squareArray[this.fallingSquares[i].index + 10].alphabet !== '') {
+      
+      if (squareArrayRef.current[fallingSquaresRef.current[i].index + 10].alphabet !== '') {
         continue;
       }
-      if (this.fallingSquares[i].alphabet === '') {
+      
+      if (fallingSquaresRef.current[i].alphabet === '') {
         continue;
       }
-      this.squareArray[this.fallingSquares[i].index + 10].alphabet =
-        this.fallingSquares[i].alphabet;
-      if (this.fallingSquares[i].selected > -1) {
-        this.selectedSquares[this.fallingSquares[i].selected] =
-          this.squareArray[this.fallingSquares[i].index + 10];
+      
+      squareArrayRef.current[fallingSquaresRef.current[i].index + 10].alphabet =
+        fallingSquaresRef.current[i].alphabet;
+        
+      if (fallingSquaresRef.current[i].selected > -1) {
+        selectedSquaresRef.current[fallingSquaresRef.current[i].selected] =
+          squareArrayRef.current[fallingSquaresRef.current[i].index + 10];
       }
-      this.squareArray[this.fallingSquares[i].index + 10].selected =
-        this.fallingSquares[i].selected;
-      this.fallingSquares[i].alphabet = '';
-      this.fallingSquares[i].selected = -1;
-      fallingSquaresNext.push(this.squareArray[this.fallingSquares[i].index + 10]);
+      
+      squareArrayRef.current[fallingSquaresRef.current[i].index + 10].selected =
+        fallingSquaresRef.current[i].selected;
+        
+      fallingSquaresRef.current[i].alphabet = '';
+      fallingSquaresRef.current[i].selected = -1;
+      fallingSquaresNext.push(squareArrayRef.current[fallingSquaresRef.current[i].index + 10]);
     }
+    
     if (fallingSquaresNext.length === 0) {
-      this.refreshFallingSquares();
+      refreshFallingSquares();
       return;
     }
-    this.fallingSquares = fallingSquaresNext;
-  }
+    
+    fallingSquaresRef.current = fallingSquaresNext;
+  }, [refreshFallingSquares]);
 
-  getGridState(gridLetters, gridSelected) {
+  // Get grid state
+  const getGridState = useCallback(() => {
+    const newLetters = [...letters];
+    const newSelected = [...selected];
+    
     for (let i = 0; i < 150; i++) {
-      gridLetters[i] = this.squareArray[i].alphabet;
-      gridSelected[i] = (this.squareArray[i].selected > -1);
+      newLetters[i] = squareArrayRef.current[i].alphabet;
+      newSelected[i] = (squareArrayRef.current[i].selected > -1);
     }
-  }
+    
+    setLetters(newLetters);
+    setSelected(newSelected);
+  }, [letters, selected]);
 
-  pauseGame() {
-    clearInterval(this.timerId);
-    this.timerId = null;
-    this.setState({gameInPlay: false});
-  }
+  // Game control functions
+  const pauseGame = useCallback(() => {
+    clearInterval(timerIdRef.current);
+    timerIdRef.current = null;
+    setGameInPlay(false);
+  }, []);
 
-  resumeGame() {
-    this.timerId = setInterval(this.updateGrid, 1000);
-    this.setState({ gameInPlay: true, instPopupShow: false, statPopupShow: false, gameOver: false });
-  }
+  const resumeGame = useCallback(() => {
+    timerIdRef.current = setInterval(updateGrid, 1000);
+    setGameInPlay(true);
+    setInstPopupShow(false);
+    setStatPopupShow(false);
+    setGameOver(false);
+  }, []);
 
-  resetGame() {
-    this.fallingSquares = [];
-    this.selectedSquares = [];
-    this.wordScoreDisplayText = [];
-    this.score = 0;
+  const resetGame = useCallback(() => {
+    fallingSquaresRef.current = [];
+    selectedSquaresRef.current = [];
+    wordScoreDisplayTextRef.current = [];
+    
+    setScore(0);
+    
     for (let i = 0; i < 150; i++) {
-      this.squareArray[i] = {
+      squareArrayRef.current[i] = {
         alphabet: '',
         selected: -1,
         index: i,
-      }
+      };
     }
 
-    this.setState({
-      letters: Array(150).fill(''),
-      selected: Array(150).fill(false),
-      displayClickable: false,
-      displayText:"",
-      gameOver: false,
-      gameInPlay: false,
-    });
-  }
+    setLetters(Array(150).fill(''));
+    setSelected(Array(150).fill(false));
+    setDisplayClickable(false);
+    setDisplayText("");
+    setGameOver(false);
+    setGameInPlay(false);
+  }, []);
 
-  updateGrid() {
-    let gridLetters = [...this.state.letters];
-    let gridSelected = [...this.state.selected];
+  // Update grid state
+  const updateGrid = useCallback(() => {
+    moveFallingSquares();
     
-    this.moveFallingSquares();
-    if (this.state.gameOver === true) {
-      setTimeout(this.resetGame, 10000);
+    if (gameOver) {
+      setTimeout(resetGame, 10000);
       return;
     }
-    this.getGridState(gridLetters, gridSelected);
-    this.setState({ letters: gridLetters, selected: gridSelected });
-  }
-
-  handleStartButtonClick() {
-    if (this.state.gameOver === true) {
-      return;
-    }
-    if (this.state.gameInPlay === false) {
-      this.resumeGame();
-    } else {
-      this.pauseGame();
-    }
-  }
-
-  handleSquareClick = (i) => {
-    if (this.state.gameInPlay === false ||
-        this.state.gameOver === true ||
-        this.squareArray[i].selected > -1) {
-      return;
-    }
-
-    if (this.squareArray[i].alphabet === '' && this.squareArray[i+10].alphabet !== '') {
-        let flag = false;
-        for (let s of this.fallingSquares) {
-            if (s.index === i+10) {
-                flag = true;
-                break;
-            }
-        }
-        if (flag === false) {
-            return;
-        }
-        i = i + 10;
-    }
-    this.squareArray[i].selected = this.selectedSquares.push(this.squareArray[i]) - 1;
-    this.wordScoreDisplayText.push(this.squareArray[i].alphabet);
-    let word = this.wordScoreDisplayText.join('');
-
-    this.checkValidWord(word);
-
-    let gridSelected = [...this.state.selected];
-    let gridLetters = [...this.state.letters];
-
-    this.getGridState(gridLetters, gridSelected);
-
-    this.setState({
-      selected: gridSelected,
-      displayText: word,
-    });
-  };
-
-  dropUpperSquares(index) {
-    if (this.squareArray[index].selected === -1)
-      return;
     
-    while (index >= 10 && this.squareArray[index - 10].alphabet !== '') {
-      if (this.squareArray[index - 10].selected > -1) {
-        this.dropUpperSquares(index-10);
+    getGridState();
+  }, [moveFallingSquares, getGridState, gameOver, resetGame]);
+
+  // Drop upper squares when word is formed
+  const dropUpperSquares = useCallback((index) => {
+    if (squareArrayRef.current[index].selected === -1) {
+      return;
+    }
+    
+    while (index >= 10 && squareArrayRef.current[index - 10].alphabet !== '') {
+      if (squareArrayRef.current[index - 10].selected > -1) {
+        dropUpperSquares(index - 10);
       }
-      this.squareArray[index].alphabet = this.squareArray[index - 10].alphabet;
-      this.squareArray[index].selected = this.squareArray[index - 10].selected;
+      
+      squareArrayRef.current[index].alphabet = squareArrayRef.current[index - 10].alphabet;
+      squareArrayRef.current[index].selected = squareArrayRef.current[index - 10].selected;
       index = index - 10;
     }
-    this.squareArray[index].alphabet = '';
-    this.squareArray[index].selected = -1;
-  }
-  
+    
+    squareArrayRef.current[index].alphabet = '';
+    squareArrayRef.current[index].selected = -1;
+  }, []);
 
-  handleDisplayClick() {
-    if (this.state.gameInPlay === false ||
-        this.state.gameOver === true ||
-        this.state.displayClickable === false) {
+  // Event handlers
+  const handleStartButtonClick = useCallback(() => {
+    if (gameOver) {
+      return;
+    }
+    
+    if (!gameInPlay) {
+      resumeGame();
+    } else {
+      pauseGame();
+    }
+  }, [gameOver, gameInPlay, resumeGame, pauseGame]);
+
+  const handleSquareClick = useCallback((i) => {
+    if (!gameInPlay || gameOver || squareArrayRef.current[i].selected > -1) {
       return;
     }
 
-    for (let i = 0; i < this.selectedSquares.length; i++) {
-      this.dropUpperSquares(this.selectedSquares[i].index);
-    }
-
-    let gridLetters = [...this.state.letters];
-    let gridSelected = [...this.state.selected];
-
-    this.getGridState(gridLetters, gridSelected);
-    this.score += this.wordScoreDisplayText.length * 2;
-    if (this.score > this.highScore) {
-      localStorage.setItem("highScore", String(this.score));
-      this.highScore = this.score;
-    }
-
-    this.selectedSquares = [];
-    this.wordScoreDisplayText = [];
-    this.setState({letters: gridLetters,
-                  selected: gridSelected,
-                  displayClickable: false,
-                  displayText:"Score: " + this.score});
-  }
-
-  handleGameOverButtonClick() {
-    this.resetGame();
-  }
-
-  handleInstClick() {
-    if (this.state.instPopupShow === true) {
-      this.setState({instPopupShow: false});
-      if (this.instPopupShowDuringGamePlay === true) {
-        this.instPopupShowDuringGamePlay = false;
-        this.resumeGame();
+    if (squareArrayRef.current[i].alphabet === '' && squareArrayRef.current[i+10].alphabet !== '') {
+      let flag = false;
+      for (let s of fallingSquaresRef.current) {
+        if (s.index === i+10) {
+          flag = true;
+          break;
+        }
       }
-    } else {
-      if (this.state.gameInPlay === true) {
-        this.pauseGame();
-        this.instPopupShowDuringGamePlay = true;
-      } else {
-        this.instPopupShowDuringGamePlay = false;
-      }
-      this.setState({instPopupShow: true, statPopupShow: false});
-    }
-  }
-
-  handleStatClick() {
-    if (this.state.statPopupShow === true) {
-      this.setState({statPopupShow: false});
-      if (this.statPopupShowDuringGamePlay === true) {
-        this.statPopupShowDuringGamePlay = false;
-        this.resumeGame();
-      }
-    } else {
-      if (this.state.gameInPlay === true) {
-        this.pauseGame();
-        this.statPopupShowDuringGamePlay = true;
-      } else {
-        this.statPopupShowDuringGamePlay = false;
-      }
-      this.setState({statPopupShow: true, instPopupShow: false});
-    }
-  }
-
-  handleBackButtonClick() {
-    if (this.state.gameInPlay === false
-      || this.selectedSquares.length === 0) {
+      
+      if (flag === false) {
         return;
       }
-    let gridSelected = [...this.state.selected];
-    let gridLetters = [...this.state.letters];
+      
+      i = i + 10;
+    }
+    
+    squareArrayRef.current[i].selected = selectedSquaresRef.current.push(squareArrayRef.current[i]) - 1;
+    wordScoreDisplayTextRef.current.push(squareArrayRef.current[i].alphabet);
+    let word = wordScoreDisplayTextRef.current.join('');
 
-    let square = this.selectedSquares.pop();
+    checkValidWord(word);
+    getGridState();
+    setDisplayText(word);
+  }, [gameInPlay, gameOver, checkValidWord, getGridState]);
+
+  const handleDisplayClick = useCallback(() => {
+    if (!gameInPlay || gameOver || !displayClickable) {
+      return;
+    }
+
+    for (let i = 0; i < selectedSquaresRef.current.length; i++) {
+      dropUpperSquares(selectedSquaresRef.current[i].index);
+    }
+
+    getGridState();
+    
+    const newScore = score + wordScoreDisplayTextRef.current.length * 2;
+    setScore(newScore);
+    
+    if (newScore > highScore) {
+      localStorage.setItem("highScore", String(newScore));
+      setHighScore(newScore);
+    }
+
+    selectedSquaresRef.current = [];
+    wordScoreDisplayTextRef.current = [];
+    setDisplayClickable(false);
+    setDisplayText(`Score: ${newScore}`);
+  }, [gameInPlay, gameOver, displayClickable, dropUpperSquares, getGridState, score, highScore]);
+
+  const handleBackButtonClick = useCallback(() => {
+    if (!gameInPlay || selectedSquaresRef.current.length === 0) {
+      return;
+    }
+    
+    let square = selectedSquaresRef.current.pop();
     square.selected = -1;
 
-    this.wordScoreDisplayText.pop();
-    let word = this.wordScoreDisplayText.join('');
+    wordScoreDisplayTextRef.current.pop();
+    let word = wordScoreDisplayTextRef.current.join('');
 
-    this.checkValidWord(word);
+    checkValidWord(word);
+    getGridState();
+    setDisplayText(word);
+  }, [gameInPlay, checkValidWord, getGridState]);
 
-    this.getGridState(gridLetters, gridSelected);
-    
-    this.setState({
-      selected: gridSelected,
-      displayText: word,
-    });
-  }
+  const handleGameOverButtonClick = useCallback(() => {
+    resetGame();
+  }, [resetGame]);
 
-  renderGrid() {
-    var grid = [];
-    for (var i = 0; i < 150; i++) {
-      grid.push(this.renderSquare(i));
+  const handleInstClick = useCallback(() => {
+    if (instPopupShow) {
+      setInstPopupShow(false);
+      if (instPopupShowDuringGamePlayRef.current) {
+        instPopupShowDuringGamePlayRef.current = false;
+        resumeGame();
+      }
+    } else {
+      if (gameInPlay) {
+        pauseGame();
+        instPopupShowDuringGamePlayRef.current = true;
+      } else {
+        instPopupShowDuringGamePlayRef.current = false;
+      }
+      
+      setInstPopupShow(true);
+      setStatPopupShow(false);
+    }
+  }, [instPopupShow, gameInPlay, pauseGame, resumeGame]);
+
+  const handleStatClick = useCallback(() => {
+    if (statPopupShow) {
+      setStatPopupShow(false);
+      if (statPopupShowDuringGamePlayRef.current) {
+        statPopupShowDuringGamePlayRef.current = false;
+        resumeGame();
+      }
+    } else {
+      if (gameInPlay) {
+        pauseGame();
+        statPopupShowDuringGamePlayRef.current = true;
+      } else {
+        statPopupShowDuringGamePlayRef.current = false;
+      }
+      
+      setStatPopupShow(true);
+      setInstPopupShow(false);
+    }
+  }, [statPopupShow, gameInPlay, pauseGame, resumeGame]);
+
+  // Render the grid
+  const renderGrid = () => {
+    const grid = [];
+    for (let i = 0; i < 150; i++) {
+      grid.push(
+        <Square 
+          key={i}
+          selected={selected[i]} 
+          letter={letters[i]} 
+          onClick={() => handleSquareClick(i)} 
+        />
+      );
     }
     return grid;
-  }
+  };
 
-  renderSquare(i) {
-    return (
-      <Square selected={this.state.selected[i]} letter={this.state.letters[i]} onClick={this.handleSquareClick.bind(this, i)} />
-    );
-  }
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerIdRef.current) {
+        clearInterval(timerIdRef.current);
+      }
+    };
+  }, []);
 
-  render() {
-    return (
-        <><div className="top-container">
-            <InstButton onClick={this.handleInstClick} />
-            <div className="lettris-name">
-                Lettris
-            </div>
-            <StatButton onClick={this.handleStatClick} />
-        </div><div className="grid-container">
-                {this.renderGrid()}
-                <InstPopup instPopupShow={this.state.instPopupShow} />
-                <StatPopup statPopupShow={this.state.statPopupShow} score={this.score} highScore={this.highScore} />
-                <GameOverPopup gameOver={this.state.gameOver} score={this.score} highScore={this.highScore} onClick={this.handleGameOverButtonClick} />
-            </div><div className="bottom-container">
-                <StartButton gameInPlay={this.state.gameInPlay} onClick={this.handleStartButtonClick} />
-                <WordAndScoreDisplay displayText={this.state.displayText}
-                    displayClickable={this.state.displayClickable}
-                    onClick={this.handleDisplayClick} />
-                <BackButton onClick={this.handleBackButtonClick} />
-            </div></>
-    );
-  }
+  return (
+    <>
+      <div className="top-container">
+        <InstButton onClick={handleInstClick} />
+        <div className="lettris-name">
+          Lettris
+        </div>
+        <StatButton onClick={handleStatClick} />
+      </div>
+      
+      <div className="grid-container">
+        {renderGrid()}
+        <InstPopup instPopupShow={instPopupShow} />
+        <StatPopup 
+          statPopupShow={statPopupShow} 
+          score={score} 
+          highScore={highScore} 
+        />
+        <GameOverPopup 
+          gameOver={gameOver} 
+          score={score} 
+          highScore={highScore} 
+          onClick={handleGameOverButtonClick} 
+        />
+      </div>
+      
+      <div className="bottom-container">
+        <StartButton 
+          gameInPlay={gameInPlay} 
+          onClick={handleStartButtonClick} 
+        />
+        <WordAndScoreDisplay 
+          displayText={displayText}
+          displayClickable={displayClickable}
+          onClick={handleDisplayClick} 
+        />
+        <BackButton onClick={handleBackButtonClick} />
+      </div>
+    </>
+  );
 };
 
 export default Lettris;
